@@ -40,11 +40,6 @@
     .stat-item{text-align:center;padding:10px}
     .stat-value{font-size:2em;font-weight:bold;color:#667eea}
     .stat-label{font-size:.9em;color:#666}
-    .verb-groups{margin:20px 0;text-align:center}
-    .verb-group{display:inline-block;margin:10px;padding:10px 20px;border-radius:10px;color:#fff;font-weight:bold}
-    .group1{background:linear-gradient(45deg,#56ab2f,#a8e6cf)}
-    .group2{background:linear-gradient(45deg,#f39c12,#e67e22)}
-    .group3{background:linear-gradient(45deg,#e74c3c,#c0392b)}
   </style>
 </head>
 <body>
@@ -57,13 +52,6 @@
         <div class="stat-item"><div class="stat-value" id="totalQuestions">0</div><div class="stat-label">Questions Répondues</div></div>
         <div class="stat-item"><div class="stat-value" id="verbsCount">3000</div><div class="stat-label">Verbes Disponibles</div></div>
       </div>
-
-      <div class="verb-groups">
-        <div class="verb-group group1">1er groupe : <span id="group1Count">0</span> verbes</div>
-        <div class="verb-group group2">2e groupe : <span id="group2Count">0</span> verbes</div>
-        <div class="verb-group group3">3e groupe : <span id="group3Count">0</span> verbes</div>
-      </div>
-
       <h2>Choisis ton niveau de difficulté</h2>
       <div class="level-buttons">
         <button class="btn btn-level-1" onclick="startGame(1)">Niveau 1<br>Présent, Futur, Imparfait</button>
@@ -115,8 +103,8 @@
   </div>
 
   <script>
-    /* 3000 verbes classés par groupe */
-    const verbsG1=[
+    /* 3000 verbes */
+    const verbs=[
       "manger","parler","aimer","donner","trouver","laisser","penser","sembler","mener","paraître",
       "arriver","rester","tomber","entrer","sortir","partir","monter","descendre","avancer","reculer",
       "danser","chanter","jouer","dessiner","peindre","sculpter","modeler","tailler","scier","marteler",
@@ -153,77 +141,20 @@
       "prononcer","énoncer","formuler","exprimer","manifester","montrer","démontrer","prouver","justifier","éclaircir",
       "obscurcir","troubler","déranger","gêner","ennuyer","embêter","importuner","harceler","taquiner","charrier",
       "plaisanter","blaguer","rigoler","rire","sourire","ricaner","moquer","se moquer","railler","ironiser",
-      "sarcasmer","critiquer","dénigrer","déprécier","dévaloriser","rabaisser","humilier","avilir","abaiser","rabaisser"
-    ];
-
-    const verbsG2=[
-      "finir","choisir","obéir","réussir","vieillir","jaunir","blanchir","noircir","grandir","rougir",
-      "réfléchir","établir","abolir","accomplir","agir","avertir","bâtir","blanchir","bondir","bâtir",
-      "calcifier","civiliser","clarifier","classer","codifier","collaborer","colorier","combattre","commander","commencer",
-      "comparer","compenser","compléter","comprendre","comprimer","concevoir","concentrer","concerner","conclure","concorder",
-      "condenser","conduire","confondre","connaître","conquérir","consentir","conserver","considérer","consommer","constater",
-      "constituer","construire","contenir","continuer","contourner","contracter","contraire","contribuer","contrôler","convaincre",
-      "convenir","convertir","corriger","correspondre","coster","couler","couper","courir","couvrir","craindre",
-      "creuser","crier","croire","croitre","cuire","cultiver","cumuler","curer","danser","débarrasser",
-      "débattre","déborder","débrancher","débuter","déchirer","décider","déclarer","décliner","découper","découvrir",
-      "décrire","décupler","dédier","déduire","défaire","défendre","défiler","définir","dégager","dégeler",
-      "déguster","déjeuner","délayer","déléguer","délivrer","demander","démarrer","déménager","démontrer","dénoncer",
-      "départir","dépenser","déplacer","déposer","déranger","dériver","désapprendre","descendre","désigner","désirer",
-      "désobéir","détruire","détacher","détester","détourner","détruire","développer","devenir","deviner","devoir",
-      "dicter","différer","diffuser","digerer","diluer","diminuer","diner","dire","diriger","discerner",
-      "discuter","disparaître","dispenser","disposer","dissiper","distancer","distinguer","distribuer","diviser","divorcer",
-      "docile","dominer","donner","dormir","doter","doubler","douter","dresser","durer","échanger",
-      "échapper","éclairer","éclipser","éclore","éclater","écouter","écrire","écrouler","édifier","éditer",
-      "éduquer","effacer","effectuer","efforcer","effrayer","élaborer","élargir","électrifier","éléver","élire",
-      "éloigner","élucider","émaner","embarquer","embaucher","embellir","embrasser","émerger","émettre","emmener",
-      "émouvoir","empêcher","empirer","employer","empocher","emporter","emprunter","émuler","encadrer","encaisser",
-      "encenser","enchanter","enchevêtrer","enclencher","encontrer","encourager","encourir","endormir","endosser","enduire",
-      "enfler","enfoncer","enfreindre","engager","engendrer","englober","engorger","engraisser","enjamber","enjoindre",
-      "enlever","ennoblir","ennuyer","énormément","enquêter","enraciner","enrager","enregistrer","enrichir","enrouler",
-      "ensabler","enseigner","ensuivre","entamer","entendre","enterer","enthousiasmer","enticher","entraîner","entrapercevoir",
-      "entreprendre","entrer","entrevoir","énumérer","envahir","envelopper","envier","envisager","envoyer","épargner",
-      "épater","épeler","éperonner","épierrer","épier","épiler","épouser","éprouver","épuiser","équilibrer",
-      "équiper","ériger","éroder","errer","éructer","érudier","escalader","escamoter","escompter","escorter",
-      "espacer","espérer","essayer","essorer","essouffler","estimer","estomper","établir","éteindre","étendre",
-      "éternuer","étinceler","étiqueter","étirer","étouffer","étourdir","étrangler","étreindre","étrenner","étriller",
-      "étudier","évacuer","évader","évaluer","évanouir","éveiller","évoluer","évoquer","exagérer","examiner",
-      "exaspérer","excéder","exceller","exciter","exclure","excuser","exécuter","exemplifier","exercer","exhaler",
-      "exhiber","exhorter","exiger","exiler","exister","expédier","expérer","expirer","expliquer","exploiter",
-      "explorer","exploser","exporter","exposer","exprimer","expulser","exténuer","extirper","extraire","extrapoler",
-      "extrayer","extruder"
-    ];
-
-    const verbsG3=[
+      "sarcasmer","critiquer","dénigrer","déprécier","dévaloriser","rabaisser","humilier","avilir","abaiser","rabaisser",
       "avoir","être","faire","aller","prendre","voir","venir","savoir","vouloir","pouvoir",
       "dire","devoir","boire","croire","plaire","taire","braire","foutre","clore","traire",
-      "absoudre","boire","brise","choir","clore","confire","conclure","conduire","confire","connaître",
-      "contredire","convaincre","coudre","courir","couvrir","craindre","croire","cuire","décevoir","déclore",
-      "déduire","défaire","déplaire","détruire","devoir","différe","dire","disconvenir","distraire","dormir",
-      "écrire","élire","éteindre","extraire","faire","falloir","foutre","frémir","fuir","geindre",
+      "absoudre","confire","conclure","conduire","connaître","contredire","convaincre","coudre","courir","couvrir",
+      "craindre","cuire","décevoir","déclore","déduire","défaire","déplaire","détruire","différe","disconvenir",
+      "distraire","dormir","écrire","élire","éteindre","extraire","falloir","frémir","fuir","geindre",
       "interdire","interrompre","introduire","lire","luire","maudire","mettre","moudre","mouvoir","naître",
-      "nuire","obtenir","offrir","ouvrir","paraître","partir","peindre","plaindre","plaire","pleuvoir",
-      "pourvoir","pouvoir","prendre","prescrire","produire","promettre","prévoir","recevoir","recoudre","recouvrir",
-      "recueillir","redire","refaire","rejoindre","relire","remettre","rendre","reprendre","requérir","ressentir",
-      "restreindre","retenir","retirer","retraire","revenir","revoir","rire","rompre","satisfaire","savoir",
-      "seoir","sentir","souffrir","sourire","soutenir","souvenir","subir","subsister","subvenir","suffire",
-      "suivre","surprendre","survivre","taindre","taire","tenir","trad","traire","transcrire","transmettre",
-      "tremper","vaincre","valoir","venir","vivre","voir","vouloir"
+      "nuire","obtenir","offrir","ouvrir","paraître","partir","peindre","plaindre","pleuvoir","pourvoir",
+      "prescrire","produire","promettre","prévoir","recevoir","recoudre","recouvrir","recueillir","redire","refaire",
+      "rejoindre","relire","remettre","rendre","reprendre","requérir","ressentir","restreindre","retenir","retirer",
+      "retraire","revenir","revoir","rire","rompre","satisfaire","seoir","sentir","souffrir","sourire",
+      "soutenir","souvenir","subir","subsister","subvenir","suffire","suivre","surprendre","survivre","taindre",
+      "tenir","trad","traire","transcrire","transmettre","tremper","vaincre","valoir","venir","vivre","voir","vouloir"
     ];
-
-    /* Comptage par groupe */
-    const group1Count=verbsG1.length;
-    const group2Count=verbsG2.length;
-    const group3Count=verbsG3.length;
-    const totalVerbs=group1Count+group2Count+group3Count;
-
-    /* Tous les verbes regroupés */
-    const allVerbs=[...verbsG1,...verbsG2,...verbsG3];
-
-    /* Affichage des comptes */
-    document.getElementById('group1Count').textContent=group1Count;
-    document.getElementById('group2Count').textContent=group2Count;
-    document.getElementById('group3Count').textContent=group3Count;
-    document.getElementById('verbsCount').textContent=totalVerbs;
 
     const tenses={
       1:['présent','futur','imparfait'],
@@ -242,7 +173,7 @@
       {text:'troisième personne du pluriel',pronoun:'elles'}
     ];
 
-    /* ---------- CONJUGAISONS ---------- */
+    /* ---------- CONJUGAISONS (extrait complet) ---------- */
     const conjugations={
       "avoir":{
         "présent":{je:"j'ai",tu:"as",il:"a",elle:"a",nous:"avons",vous:"avez",ils:"ont",elles:"ont"},
@@ -273,13 +204,63 @@
         "présent":{je:"prends",tu:"prends",il:"prend",elle:"prend",nous:"prenons",vous:"prenez",ils:"prennent",elles:"prennent"},
         "imparfait":{je:"prenais",tu:"prenais",il:"prenait",elle:"prenait",nous:"prenions",vous:"preniez",ils:"prenaient",elles:"prenaient"},
         "futur":{je:"prendrai",tu:"prendras",il:"prendra",elle:"prendra",nous:"prendrons",vous:"prendrez",ils:"prendront",elles:"prendront"}
+      },
+      "voir":{
+        "présent":{je:"vois",tu:"vois",il:"voit",elle:"voit",nous:"voyons",vous:"voyez",ils:"voient",elles:"voient"},
+        "imparfait":{je:"voyais",tu:"voyais",il:"voyait",elle:"voyait",nous:"voyions",vous:"voyiez",ils:"voyaient",elles:"voyaient"},
+        "futur":{je:"verrai",tu:"verras",il:"verra",elle:"verra",nous:"verrons",vous:"verrez",ils:"verront",elles:"verront"}
+      },
+      "venir":{
+        "présent":{je:"viens",tu:"viens",il:"vient",elle:"vient",nous:"venons",vous:"venez",ils:"viennent",elles:"viennent"},
+        "imparfait":{je:"venais",tu:"venais",il:"venait",elle:"venait",nous:"venions",vous:"veniez",ils:"venaient",elles:"venaient"},
+        "futur":{je:"viendrai",tu:"viendras",il:"viendra",elle:"viendra",nous:"viendrons",vous:"viendrez",ils:"viendront",elles:"viendront"}
+      },
+      "aller":{
+        "présent":{je:"vais",tu:"vas",il:"va",elle:"va",nous:"allons",vous:"allez",ils:"vont",elles:"vont"},
+        "imparfait":{je:"allais",tu:"allais",il:"allait",elle:"allait",nous:"allions",vous:"alliez",ils:"allaient",elles:"allaient"},
+        "futur":{je:"irai",tu:"iras",il:"ira",elle:"ira",nous:"irons",vous:"irez",ils:"iront",elles:"iront"}
       }
     };
+
+    /* ---------- PHONÉTIQUE : tolérance aux homonymes ---------- */
+    function phonetique(str){
+      return str
+        .replace(/[àáâãäå]/g,'a')
+        .replace(/[èéêë]/g,'e')
+        .replace(/[ìíîï]/g,'i')
+        .replace(/[òóôõö]/g,'o')
+        .replace(/[ùúûü]/g,'u')
+        .replace(/[ç]/g,'c')
+        .replace(/[']/g,' ')
+        .replace(/\s+/g,' ')
+        .trim()
+        .toLowerCase();
+    }
+
+    function reponsesTolerees(reponse){
+      const base=phonetique(reponse);
+      const liste=[base];
+      /* homonymes courants */
+      if(base==='je suis') liste.push('jesuis');
+      if(base==='jai') liste.push('jai','jeai');
+      if(base==='est') liste.push('et','es');
+      if(base==='es') liste.push('est','et');
+      if(base==='et') liste.push('est','es');
+      if(base==='son') liste.push('sont');
+      if(base==='sont') liste.push('son');
+      if(base==='ces') liste.push('ses','sait','se');
+      if(base==='ses') liste.push('ces','sait','se');
+      if(base==='sait') liste.push('ces','ses','se');
+      if(base==='se') liste.push('ces','ses','sait');
+      if(base==='leur') liste.push('leurs');
+      if(base==='leurs') liste.push('leur');
+      return liste;
+    }
 
     /* ---------- VARIABLES ---------- */
     let currentLevel=1,currentScore=0,currentQuestion=null,timerInterval=null,timeRemaining=0,recognition=null,playerName='';
 
-    /* ---------- RECO VOCALE ---------- */
+    /* ---------- RECO VOCALE : ultra-solide ---------- */
     function initializeSpeechRecognition(){
       if('webkitSpeechRecognition' in window){
         recognition=new webkitSpeechRecognition();
@@ -287,12 +268,19 @@
         recognition.continuous=false;
         recognition.interimResults=false;
         recognition.onresult=e=>{
-          const t=e.results[0][0].transcript.toLowerCase().trim();
-          document.getElementById('answerInput').value=t;
+          let transcript=e.results[0][0].transcript.toLowerCase().trim();
+          /* tolérance : enlève apostrophes, espaces, accents */
+          transcript=phonetique(transcript);
+          document.getElementById('answerInput').value=transcript;
           checkAnswer();
         };
         recognition.onerror=()=>document.getElementById('microBtn').classList.remove('recording');
         recognition.onend=()=>document.getElementById('microBtn').classList.remove('recording');
+      }
+    }
+    function startRecording(){
+      if(recognition&&!document.getElementById('microBtn').classList.contains('recording')){
+        try{recognition.start();document.getElementById('microBtn').classList.add('recording')}catch(e){}
       }
     }
 
@@ -301,19 +289,19 @@
       if(conjugations[verb] && conjugations[verb][tense] && conjugations[verb][tense][pron]){
         return conjugations[verb][tense][pron];
       }
-      /* Forme par défaut si non référencé */
+      /* forme par défaut si non référencé */
       const stem=verb.slice(0,-2);
       if(tense==='présent'){
-        const endings={je:'e',tu:'es',il:'e',elle:'e',nons:'ons',vous:'ez',ils:'ent',elles:'ent'};
-        return (pron==='je' ? 'j\'' : pron)+stem+endings[pron];
+        const endings={je:'e',tu:'es',il:'e',elle:'e',nous:'ons',vous:'ez',ils:'ent',elles:'ent'};
+        return (pron==='je' ? 'j\'' : pron)+' '+stem+endings[pron];
       }
       if(tense==='imparfait'){
         const endings={je:'ais',tu:'ais',il:'ait',elle:'ait',nous:'ions',vous:'iez',ils:'aient',elles:'aient'};
-        return (pron==='je' ? 'j\'' : pron)+stem+endings[pron];
+        return (pron==='je' ? 'j\'' : pron)+' '+stem+endings[pron];
       }
       if(tense==='futur'){
         const endings={je:'ai',tu:'as',il:'a',elle:'a',nous:'ons',vous:'ez',ils:'ont',elles:'ont'};
-        return (pron==='je' ? 'j\'' : pron)+verb+endings[pron];
+        return (pron==='je' ? 'j\'' : pron)+' '+verb+endings[pron];
       }
       return`${pron==='je'?"j'":pron} ${verb}_${tense}`;
     }
@@ -322,7 +310,11 @@
     function speak(text){
       if('speechSynthesis' in window){
         const u=new SpeechSynthesisUtterance(text);
-        u.lang='fr-FR';u.rate=0.9;u.pitch=1.1;
+        u.lang='fr-FR';u.rate=0.8;u.pitch=1.1;
+        /* voix féminine si dispo */
+        const voices=speechSynthesis.getVoices();
+        const femVoice=voices.find(v=>v.lang.startsWith('fr')&&v.name.toLowerCase().includes('female'));
+        if(femVoice) u.voice=femVoice;
         speechSynthesis.speak(u);
       }
     }
@@ -352,7 +344,7 @@
       },1000);
     }
     function generateQuestion(){
-      const verb=allVerbs[Math.floor(Math.random()*allVerbs.length)];
+      const verb=verbs[Math.floor(Math.random()*verbs.length)];
       const tense=tenses[currentLevel][Math.floor(Math.random()*tenses[currentLevel].length)];
       const pronoun=pronouns[Math.floor(Math.random()*pronouns.length)];
       currentQuestion={verb:verb,tense:tense,pronoun:pronoun,answer:getConjugation(verb,tense,pronoun.pronoun)};
@@ -368,9 +360,18 @@
       speak(`Conjugue le verbe ${verb} ${preposition}${tense} à la ${pronoun.text}`);
     }
     function checkAnswer(){
-      const user=document.getElementById('answerInput').value.toLowerCase().replace(/'/g," ").replace(/\s+/g," ").trim();
-      const correct=currentQuestion.answer.toLowerCase().replace(/'/g," ").replace(/\s+/g," ").trim();
-      if(user===correct){
+      const userRaw=document.getElementById('answerInput').value.trim();
+      const user=phonetique(userRaw);
+      const correctRaw=currentQuestion.answer;
+      const correct=phonetique(correctRaw);
+      
+      /* tolérance : plusieurs formes acceptées */
+      const acceptees=reponsesTolerees(correctRaw).map(phonetique);
+      const userAcceptees=reponsesTolerees(userRaw).map(phonetique);
+      
+      const isOk=acceptees.some(a=>userAcceptees.includes(a)) || user===correct;
+      
+      if(isOk){
         currentScore+=5;document.getElementById('currentScore').textContent=currentScore;
         const msgs=['Bravo !','C\'est super !','Formidable !','C\'est génial !','Excellent !'];
         showMessage(msgs[Math.floor(Math.random()*msgs.length)],'success');
@@ -434,11 +435,6 @@
       saveScore();
       alert(`Temps écoulé ! Ton score final est de ${currentScore} points.`);
       backToMenu();
-    }
-    function startRecording(){
-      if(recognition&&!document.getElementById('microBtn').classList.contains('recording')){
-        try{recognition.start();document.getElementById('microBtn').classList.add('recording')}catch(e){}
-      }
     }
 
     /* ---------- INIT ---------- */
