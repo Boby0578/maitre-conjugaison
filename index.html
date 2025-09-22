@@ -473,6 +473,7 @@
         setTimeout(()=>generateQuestion(),2000);
       }else{
         currentScore=Math.max(0,currentScore-5);document.getElementById('currentScore').textContent=currentScore;
+        speak('Erreur'); // 🔊 mot "erreur" uniquement après réponse fausse
         const msgs=['Tu peux le faire !','Allez, continue !','Réfléchis bien !','Essaye encore !','Ne te décourage pas !'];
         const msg=msgs[Math.floor(Math.random()*msgs.length)];
         showMessage(msg,'error');
