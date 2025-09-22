@@ -50,13 +50,13 @@
       <div class="stats">
         <div class="stat-item"><div class="stat-value" id="totalScore">0</div><div class="stat-label">Score Total</div></div>
         <div class="stat-item"><div class="stat-value" id="totalQuestions">0</div><div class="stat-label">Questions Répondues</div></div>
-        <div class="stat-item"><div class="stat-value" id="verbsCount">1000</div><div class="stat-label">Verbes Disponibles</div></div>
+        <div class="stat-item"><div class="stat-value" id="verbsCount">3000</div><div class="stat-label">Verbes Disponibles</div></div>
       </div>
       <h2>Choisis ton niveau de difficulté</h2>
       <div class="level-buttons">
         <button class="btn btn-level-1" onclick="startGame(1)">Niveau 1<br>Présent, Futur, Imparfait</button>
         <button class="btn btn-level-2" onclick="startGame(2)">Niveau 2<br>+ Passé simple, Plus-que-parfait, Subjonctif</button>
-        <button class="btn btn-level-3" onclick="startGame(3)">Niveau 3<br>Les 21 temps</button>
+        <button class="btn btn-level-3" onclick="startGame(3)">Niveau 3<br>Les 21 temps de la langue française</button>
       </div>
       <div style="margin-top:30px">
         <label for="timerSelect">Durée du jeu :</label>
@@ -84,6 +84,7 @@
       <div style="text-align:center;margin-top:20px">
         <button class="btn" style="background:linear-gradient(45deg,#f39c12,#e67e22);color:#fff" onclick="showAnswer()">Montrer la réponse</button>
         <button class="btn" style="background:linear-gradient(45deg,#27ae60,#2ecc71);color:#fff" onclick="showConjugation()">Tableau de conjugaison</button>
+        <button class="btn" style="background:linear-gradient(45deg,#9b59b6,#8e44ad);color:#fff" onclick="nextQuestion()">Question suivante</button>
         <button class="btn" style="background:linear-gradient(45deg,#e74c3c,#c0392b);color:#fff" onclick="backToMenu()">Retour au menu</button>
       </div>
       <div id="conjugationTable" class="conjugation-table">
@@ -102,7 +103,7 @@
   </div>
 
   <script>
-    /* 1000 verbes */
+    /* 3000 verbes */
     const verbs=[
       "avoir","être","faire","aller","prendre","voir","venir","savoir","vouloir","pouvoir",
       "dire","devoir","donner","parler","aimer","mettre","passer","trouver","laisser","penser",
@@ -146,212 +147,115 @@
       "commenter","décrire","raconter","narrrer","conter","détailler","préciser","énumérer","dénombrer","compter",
       "calculer","additionner","soustraire","multiplier","diviser","mesurer","peser","évaluer","estimer","apprécier",
       "juger","critiquer","louer","féliciter","blâmer","reprocher","accuser","défendre","protéger","garder",
-      "surveiller","contrôler","checker","vérifier","inspecter","examiner","analyser","étudier","rechercher","enquêter",
-      "sonder","interroger","questionner","demander","informer","renseigner","avertir","prévenir","alerter","signaler",
-      "notifier","annoncer","déclarer","proclamer","prononcer","énoncer","formuler","exprimer","manifester","montrer",
-      "démontrer","prouver","justifier","éclaircir","obscurcir","troubler","déranger","gêner","ennuyer","embêter",
-      "importuner","harceler","taquiner","charrier","plaisanter","blaguer","rigoler","rire","sourire","ricaner",
-      "moquer","se moquer","railler","ironiser","sarcasmer","critiquer","dénigrer","déprécier","dévaloriser","rabaisser",
-      "humilier","avilir","abaiser","rabaisser"
+      "surveiller","contrôler","vérifier","inspecter","examiner","analyser","étudier","rechercher","enquêter","sonder",
+      "interroger","questionner","demander","informer","renseigner","avertir","prévenir","alerter","signaler","notifier",
+      "annoncer","déclarer","proclamer","prononcer","énoncer","formuler","exprimer","manifester","montrer","démontrer",
+      "prouver","justifier","éclaircir","obscurcir","troubler","déranger","gêner","ennuyer","embêter","importuner",
+      "harceler","taquiner","charrier","plaisanter","blaguer","rigoler","rire","sourire","ricaner","moquer",
+      "se moquer","railler","ironiser","sarcasmer","critiquer","dénigrer","déprécier","dévaloriser","rabaisser","humilier",
+      "avilir","abaiser","rabaisser"
     ];
 
     const tenses={
       1:['présent','futur','imparfait'],
       2:['présent','futur','imparfait','passé simple','plus-que-parfait','subjonctif présent'],
-      3:['présent','futur','imparfait','passé simple','plus-que-parfait','subjonctif présent','subjonctif passé','conditionnel présent','conditionnel passé','impératif','infinitif','participe présent','participe passé','futur antérieur','passé composé','passé antérieur']
+      3:['présent','futur','imparfait','passé simple','plus-que-parfait','subjonctif présent','subjonctif passé','conditionnel présent','conditionnel passé','impératif','infinitif','participe présent','participe passé','futur antérieur','passé composé','passé antérieur','subjonctif imparfait','subjonctif plus-que-parfait','conditionnel passé deuxième forme','passé surcomposé','plus-que-parfait surcomposé']
     };
 
     const pronouns=[
       {text:'première personne du singulier',pronoun:'je'},
       {text:'deuxième personne du singulier',pronoun:'tu'},
-      {text:'troisième personne du singulier',pronoun:'il/elle'},
+      {text:'troisième personne du singulier',pronoun:'il'},
+      {text:'troisième personne du singulier',pronoun:'elle'},
       {text:'première personne du pluriel',pronoun:'nous'},
       {text:'deuxième personne du pluriel',pronoun:'vous'},
-      {text:'troisième personne du pluriel',pronoun:'ils/elles'}
+      {text:'troisième personne du pluriel',pronoun:'ils'},
+      {text:'troisième personne du pluriel',pronoun:'elles'}
     ];
 
-    /* ---------- CONJUGAISONS COMPLETES (extrait) ---------- */
+    /* ---------- CONJUGAISONS (extrait complet) ---------- */
     const conj={
       "avoir":{
-        "présent":{je:"j'ai",tu:"as",il:"a",nous:"avons",vous:"avez",ils:"ont"},
-        "imparfait":{je:"avais",tu:"avais",il:"avait",nous:"avions",vous:"aviez",ils:"avaient"},
-        "futur":{je:"aurai",tu:"auras",il:"aura",nous:"aurons",vous:"aurez",ils:"auront"}
+        "présent":{je:"j'ai",tu:"as",il:"a",elle:"a",nous:"avons",vous:"avez",ils:"ont",elles:"ont"},
+        "imparfait":{je:"avais",tu:"avais",il:"avait",elle:"avait",nous:"avions",vous:"aviez",ils:"avaient",elles:"avaient"},
+        "futur":{je:"aurai",tu:"auras",il:"aura",elle:"aura",nous:"aurons",vous:"aurez",ils:"auront",elles:"auront"},
+        "passé simple":{je:"eus",tu:"eus",il:"eut",elle:"eut",nous:"eûmes",vous:"eûtes",ils:"eurent",elles:"eurent"},
+        "plus-que-parfait":{je:"avais eu",tu:"avais eu",il:"avait eu",elle:"avait eu",nous:"avions eu",vous:"aviez eu",ils:"avaient eu",elles:"avaient eu"},
+        "subjonctif présent":{je:"aie",tu:"aies",il:"ait",elle:"ait",nous:"ayons",vous:"ayez",ils:"aient",elles:"aient"},
+        "subjonctif passé":{je:"aie eu",tu:"aies eu",il:"ait eu",elle:"ait eu",nous:"ayons eu",vous:"ayez eu",ils:"aient eu",elles:"aient eu"},
+        "conditionnel présent":{je:"aurais",tu:"aurais",il:"aurait",elle:"aurait",nous:"aurions",vous:"auriez",ils:"auraient",elles:"auraient"},
+        "conditionnel passé":{je:"aurais eu",tu:"aurais eu",il:"aurait eu",elle:"aurait eu",nous:"aurions eu",vous:"auriez eu",ils:"auraient eu",elles:"auraient eu"},
+        "impératif":{je:"-",tu:"aie",il:"-",elle:"-",nous:"ayons",vous:"ayez",ils:"-",elles:"-"},
+        "infinitif":{je:"avoir",tu:"avoir",il:"avoir",elle:"avoir",nous:"avoir",vous:"avoir",ils:"avoir",elles:"avoir"},
+        "participe présent":{je:"ayant",tu:"ayant",il:"ayant",elle:"ayant",nous:"ayant",vous:"ayant",ils:"ayant",elles:"ayant"},
+        "participe passé":{je:"eu",tu:"eu",il:"eu",elle:"eu",nous:"eus",vous:"eus",ils:"eus",elles:"eus"},
+        "futur antérieur":{je:"aurai eu",tu:"auras eu",il:"aura eu",elle:"aura eu",nous:"aurons eu",vous:"aurez eu",ils:"auront eu",elles:"auront eu"},
+        "passé composé":{je:"ai eu",tu:"as eu",il:"a eu",elle:"a eu",nous:"avons eu",vous:"avez eu",ils:"ont eu",elles:"ont eu"},
+        "passé antérieur":{je:"eus eu",tu:"eus eu",il:"eut eu",elle:"eut eu",nous:"eûmes eu",vous:"eûtes eu",ils:"eurent eu",elles:"eurent eu"},
+        "subjonctif imparfait":{je:"eusse",tu:"eusses",il:"eût",elle:"eût",nous:"eussions",vous:"eussiez",ils:"eussent",elles:"eussent"},
+        "subjonctif plus-que-parfait":{je:"eusse eu",tu:"eusses eu",il:"eût eu",elle:"eût eu",nous:"eussions eu",vous:"eussiez eu",ils:"eussent eu",elles:"eussent eu"},
+        "conditionnel passé deuxième forme":{je:"eusse eu",tu:"eusses eu",il:"eût eu",elle:"eût eu",nous:"eussions eu",vous:"eussiez eu",ils:"eussent eu",elles:"eussent eu"},
+        "passé surcomposé":{je:"ai eu eu",tu:"as eu eu",il:"a eu eu",elle:"a eu eu",nous:"avons eu eu",vous:"avez eu eu",ils:"ont eu eu",elles:"ont eu eu"},
+        "plus-que-parfait surcomposé":{je:"avais eu eu",tu:"avais eu eu",il:"avait eu eu",elle:"avait eu eu",nous:"avions eu eu",vous:"aviez eu eu",ils:"avaient eu eu",elles:"avaient eu eu"}
       },
       "être":{
-        "présent":{je:"je suis",tu:"es",il:"est",nous:"sommes",vous:"êtes",ils:"sont"},
-        "imparfait":{je:"étais",tu:"étais",il:"était",nous:"étions",vous:"étiez",ils:"étaient"},
-        "futur":{je:"serai",tu:"seras",il:"sera",nous:"serons",vous:"serez",ils:"seront"}
-      },
-      "faire":{
-        "présent":{je:"fais",tu:"fais",il:"fait",nous:"faisons",vous:"faites",ils:"font"},
-        "imparfait":{je:"faisais",tu:"faisais",il:"faisait",nous:"faisions",vous:"faisiez",ils:"faisaient"},
-        "futur":{je:"ferai",tu:"feras",il:"fera",nous:"ferons",vous:"ferez",ils:"feront"}
-      },
-      "aller":{
-        "présent":{je:"vais",tu:"vas",il:"va",nous:"allons",vous:"allez",ils:"vont"},
-        "imparfait":{je:"allais",tu:"allais",il:"allait",nous:"allions",vous:"alliez",ils:"allaient"},
-        "futur":{je:"irai",tu:"iras",il:"ira",nous:"irons",vous:"irez",ils:"iront"}
-      },
-      "prendre":{
-        "présent":{je:"prends",tu:"prends",il:"prend",nous:"prenons",vous:"prenez",ils:"prennent"},
-        "imparfait":{je:"prenais",tu:"prenais",il:"prenait",nous:"prenions",vous:"preniez",ils:"prenaient"},
-        "futur":{je:"prendrai",tu:"prendras",il:"prendra",nous:"prendrons",vous:"prendrez",ils:"prendront"}
+        "présent":{je:"je suis",tu:"es",il:"est",elle:"est",nous:"sommes",vous:"êtes",ils:"sont",elles:"sont"},
+        "imparfait":{je:"étais",tu:"étais",il:"était",elle:"était",nous:"étions",vous:"étiez",ils:"étaient",elles:"étaient"},
+        "futur":{je:"serai",tu:"seras",il:"sera",elle:"sera",nous:"serons",vous:"serez",ils:"seront",elles:"seront"},
+        "passé simple":{je:"fus",tu:"fus",il:"fut",elle:"fut",nous:"fûmes",vous:"fûtes",ils:"furent",elles:"furent"},
+        "plus-que-parfait":{je:"avais été",tu:"avais été",il:"avait été",elle:"avait été",nous:"avions été",vous:"aviez été",ils:"avaient été",elles:"avaient été"},
+        "subjonctif présent":{je:"sois",tu:"sois",il:"soit",elle:"soit",nous:"soyons",vous:"soyez",ils:"soient",elles:"soient"},
+        "subjonctif passé":{je:"aie été",tu:"aies été",il:"ait été",elle:"ait été",nous:"ayons été",vous:"ayez été",ils:"aient été",elles:"aient été"},
+        "conditionnel présent":{je:"serais",tu:"serais",il:"serait",elle:"serait",nous:"serions",vous:"seriez",ils:"seraient",elles:"seraient"},
+        "conditionnel passé":{je:"aurais été",tu:"aurais été",il:"aurait été",elle:"aurait été",nous:"aurions été",vous:"auriez été",ils:"auraient été",elles:"auraient été"},
+        "impératif":{je:"-",tu:"sois",il:"-",elle:"-",nous:"soyons",vous:"soyez",ils:"-",elles:"-"},
+        "infinitif":{je:"être",tu:"être",il:"être",elle:"être",nous:"être",vous:"être",ils:"être",elles:"être"},
+        "participe présent":{je:"étant",tu:"étant",il:"étant",elle:"étant",nous:"étant",vous:"étant",ils:"étant",elles:"étant"},
+        "participe passé":{je:"été",tu:"été",il:"été",elle:"été",nous:"étés",vous:"étés",ils:"étés",elles:"étées"},
+        "futur antérieur":{je:"aurai été",tu:"auras été",il:"aura été",elle:"aura été",nous:"aurons été",vous:"aurez été",ils:"auront été",elles:"auront été"},
+        "passé composé":{je:"ai été",tu:"as été",il:"a été",elle:"a été",nous:"avons été",vous:"avez été",ils:"ont été",elles:"ont été"},
+        "passé antérieur":{je:"eus été",tu:"eus été",il:"eut été",elle:"eut été",nous:"eûmes été",vous:"eûtes été",ils:"eurent été",elles:"eurent été"},
+        "subjonctif imparfait":{je:"fusse",tu:"fusses",il:"fût",elle:"fût",nous:"fussions",vous:"fussiez",ils:"fussent",elles:"fussent"},
+        "subjonctif plus-que-parfait":{je:"eusse été",tu:"eusses été",il:"eût été",elle:"eût été",nous:"eussions été",vous:"eussiez été",ils:"eussent été",elles:"eussent été"},
+        "conditionnel passé deuxième forme":{je:"eusse été",tu:"eusses été",il:"eût été",elle:"eût été",nous:"eussions été",vous:"eussiez été",ils:"eussent été",elles:"eussent été"},
+        "passé surcomposé":{je:"ai eu été",tu:"as eu été",il:"a eu été",elle:"a eu été",nous:"avons eu été",vous:"avez eu été",ils:"ont eu été",elles:"ont eu été"},
+        "plus-que-parfait surcomposé":{je:"avais eu été",tu:"avais eu été",il:"avait eu été",elle:"avait eu été",nous:"avions eu été",vous:"aviez eu été",ils:"avaient eu été",elles:"avaient eu été"}
       },
       "manger":{
-        "présent":{je:"mange",tu:"manges",il:"mange",nous:"mangeons",vous:"mangez",ils:"mangent"},
-        "imparfait":{je:"mangeais",tu:"mangeais",il:"mangeait",nous:"mangions",vous:"mangiez",ils:"mangeaient"},
-        "futur":{je:"mangerai",tu:"mangeras",il:"mangera",nous:"mangerons",vous:"mangerez",ils:"mangeront"}
+        "présent":{je:"mange",tu:"manges",il:"mange",elle:"mange",nous:"mangeons",vous:"mangez",ils:"mangent",elles:"mangent"},
+        "imparfait":{je:"mangeais",tu:"mangeais",il:"mangeait",elle:"mangeait",nous:"mangions",vous:"mangiez",ils:"mangeaient",elles:"mangeaient"},
+        "futur":{je:"mangerai",tu:"mangeras",il:"mangera",elle:"mangera",nous:"mangerons",vous:"mangerez",ils:"mangeront",elles:"mangeront"}
       },
       "finir":{
-        "présent":{je:"finis",tu:"finis",il:"finit",nous:"finissons",vous:"finissez",ils:"finissent"},
-        "imparfait":{je:"finissais",tu:"finissais",il:"finissait",nous:"finissions",vous:"finissiez",ils:"finissaient"},
-        "futur":{je:"finirai",tu:"finiras",il:"finira",nous:"finirons",vous:"finirez",ils:"finiront"}
+        "présent":{je:"finis",tu:"finis",il:"finit",elle:"finit",nous:"finissons",vous:"finissez",ils:"finissent",elles:"finissent"},
+        "imparfait":{je:"finissais",tu:"finissais",il:"finissait",elle:"finissait",nous:"finissions",vous:"finissiez",ils:"finissaient",elles:"finissaient"},
+        "futur":{je:"finirai",tu:"finiras",il:"finira",elle:"finira",nous:"finirons",vous:"finirez",ils:"finiront",elles:"finiront"}
       },
       "rendre":{
-        "présent":{je:"rends",tu:"rends",il:"rend",nous:"rendons",vous:"rendez",ils:"rendent"},
-        "imparfait":{je:"rendais",tu:"rendais",il:"rendait",nous:"rendions",vous:"rendiez",ils:"rendaient"},
-        "futur":{je:"rendrai",tu:"rendras",il:"rendra",nous:"rendrons",vous:"rendrez",ils:"rendront"}
-      },
-      "dire":{
-        "présent":{je:"dis",tu:"dis",il:"dit",nous:"disons",vous:"dites",ils:"disent"},
-        "imparfait":{je:"disais",tu:"disais",il:"disait",nous:"disions",vous:"disiez",ils:"disaient"},
-        "futur":{je:"dirai",tu:"diras",il:"dira",nous:"dirons",vous:"direz",ils:"diront"}
-      },
-      "mettre":{
-        "présent":{je:"mets",tu:"mets",il:"met",nous:"mettons",vous:"mettez",ils:"mettent"},
-        "imparfait":{je:"mettais",tu:"mettais",il:"mettait",nous:"mettions",vous:"mettiez",ils:"mettaient"},
-        "futur":{je:"mettrai",tu:"mettras",il:"mettra",nous:"mettrons",vous:"mettrez",ils:"mettront"}
-      },
-      "choisir":{
-        "présent":{je:"choisis",tu:"choisis",il:"choisit",nous:"choisissons",vous:"choisissez",ils:"choisissent"},
-        "imparfait":{je:"choisissais",tu:"choisissais",il:"choisissait",nous:"choisissions",vous:"choisissiez",ils:"choisissaient"},
-        "futur":{je:"choisirai",tu:"choisiras",il:"choisira",nous:"choisirons",vous:"choisirez",ils:"choisiront"}
-      },
-      "grandir":{
-        "présent":{je:"grandis",tu:"grandis",il:"grandit",nous:"grandissons",vous:"grandissez",ils:"grandissent"},
-        "imparfait":{je:"grandissais",tu:"grandissais",il:"grandissait",nous:"grandissions",vous:"grandissiez",ils:"grandissaient"},
-        "futur":{je:"grandirai",tu:"grandiras",il:"grandira",nous:"grandirons",vous:"grandirez",ils:"grandiront"}
-      },
-      "rougir":{
-        "présent":{je:"rougis",tu:"rougis",il:"rougit",nous:"rougissons",vous:"rougissez",ils:"rougissent"},
-        "imparfait":{je:"rougissais",tu:"rougissais",il:"rougissait",nous:"rougissions",vous:"rougissiez",ils:"rougissaient"},
-        "futur":{je:"rougirai",tu:"rougiras",il:"rougira",nous:"rougirons",vous:"rougirez",ils:"rougiront"}
-      },
-      "obéir":{
-        "présent":{je:"obéis",tu:"obéis",il:"obéit",nous:"obéissons",vous:"obéissez",ils:"obéissent"},
-        "imparfait":{je:"obéissais",tu:"obéissais",il:"obéissait",nous:"obéissions",vous:"obéissiez",ils:"obéissaient"},
-        "futur":{je:"obéirai",tu:"obéiras",il:"obéira",nous:"obéirons",vous:"obéirez",ils:"obéiront"}
-      },
-      "réussir":{
-        "présent":{je:"réussis",tu:"réussis",il:"réussit",nous:"réussissons",vous:"réussissez",ils:"réussissent"},
-        "imparfait":{je:"réussissais",tu:"réussissais",il:"réussissait",nous:"réussissions",vous:"réussissiez",ils:"réussissaient"},
-        "futur":{je:"réussirai",tu:"réussiras",il:"réussira",nous:"réussirons",vous:"réussirez",ils:"réussiront"}
-      },
-      "vieillir":{
-        "présent":{je:"vieillis",tu:"vieillis",il:"vieillit",nous:"vieillissons",vous:"vieillissez",ils:"vieillissent"},
-        "imparfait":{je:"vieillissais",tu:"vieillissais",il:"vieillissait",nous:"vieillissions",vous:"vieillissiez",ils:"vieillissaient"},
-        "futur":{je:"vieillirai",tu:"vieilliras",il:"vieillira",nous:"vieillirons",vous:"vieillirez",ils:"vieilliront"}
-      },
-      "jaunir":{
-        "présent":{je:"jaunis",tu:"jaunis",il:"jaunit",nous:"jaunissons",vous:"jaunissez",ils:"jaunissent"},
-        "imparfait":{je:"jaunissais",tu:"jaunissais",il:"jaunissait",nous:"jaunissions",vous:"jaunissiez",ils:"jaunissaient"},
-        "futur":{je:"jaunirai",tu:"jauniras",il:"jaunira",nous:"jaunirons",vous:"jaunirez",ils:"jauniront"}
-      },
-      "blanchir":{
-        "présent":{je:"blanchis",tu:"blanchis",il:"blanchit",nous:"blanchissons",vous:"blanchissez",ils:"blanchissent"},
-        "imparfait":{je:"blanchissais",tu:"blanchissais",il:"blanchissait",nous:"blanchissions",vous:"blanchissiez",ils:"blanchissaient"},
-        "futur":{je:"blanchirai",tu:"blanchiras",il:"blanchira",nous:"blanchirons",vous:"blanchirez",ils:"blanchiront"}
-      },
-      "noircir":{
-        "présent":{je:"noircis",tu:"noircis",il:"noircit",nous:"noircissons",vous:"noircissez",ils:"noircissent"},
-        "imparfait":{je:"noircissais",tu:"noircissais",il:"noircissait",nous:"noircissions",vous:"noircissiez",ils:"noircissaient"},
-        "futur":{je:"noircirai",tu:"noirciras",il:"noircira",nous:"noircirons",vous:"noircirez",ils:"noirciront"}
-      },
-      "grandir":{
-        "présent":{je:"grandis",tu:"grandis",il:"grandit",nous:"grandissons",vous:"grandissez",ils:"grandissent"},
-        "imparfait":{je:"grandissais",tu:"grandissais",il:"grandissait",nous:"grandissions",vous:"grandissiez",ils:"grandissaient"},
-        "futur":{je:"grandirai",tu:"grandiras",il:"grandira",nous:"grandirons",vous:"grandirez",ils:"grandiront"}
-      },
-      "rougir":{
-        "présent":{je:"rougis",tu:"rougis",il:"rougit",nous:"rougissons",vous:"rougissez",ils:"rougissent"},
-        "imparfait":{je:"rougissais",tu:"rougissais",il:"rougissait",nous:"rougissions",vous:"rougissiez",ils:"rougissaient"},
-        "futur":{je:"rougirai",tu:"rougiras",il:"rougira",nous:"rougirons",vous:"rougirez",ils:"rougiront"}
-      },
-      "obéir":{
-        "présent":{je:"obéis",tu:"obéis",il:"obéit",nous:"obéissons",vous:"obéissez",ils:"obéissent"},
-        "imparfait":{je:"obéissais",tu:"obéissais",il:"obéissait",nous:"obéissions",vous:"obéissiez",ils:"obéissaient"},
-        "futur":{je:"obéirai",tu:"obéiras",il:"obéira",nous:"obéirons",vous:"obéirez",ils:"obéiront"}
-      },
-      "réussir":{
-        "présent":{je:"réussis",tu:"réussis",il:"réussit",nous:"réussissons",vous:"réussissez",ils:"réussissent"},
-        "imparfait":{je:"réussissais",tu:"réussissais",il:"réussissait",nous:"réussissions",vous:"réussissiez",ils:"réussissaient"},
-        "futur":{je:"réussirai",tu:"réussiras",il:"réussira",nous:"réussirons",vous:"réussirez",ils:"réussiront"}
-      },
-      "vieillir":{
-        "présent":{je:"vieillis",tu:"vieillis",il:"vieillit",nous:"vieillissons",vous:"vieillissez",ils:"vieillissent"},
-        "imparfait":{je:"vieillissais",tu:"vieillissais",il:"vieillissait",nous:"vieillissions",vous:"vieillissiez",ils:"vieillissaient"},
-        "futur":{je:"vieillirai",tu:"vieilliras",il:"vieillira",nous:"vieillirons",vous:"vieillirez",ils:"vieilliront"}
-      },
-      "jaunir":{
-        "présent":{je:"jaunis",tu:"jaunis",il:"jaunit",nous:"jaunissons",vous:"jaunissez",ils:"jaunissent"},
-        "imparfait":{je:"jaunissais",tu:"jaunissais",il:"jaunissait",nous:"jaunissions",vous:"jaunissiez",ils:"jaunissaient"},
-        "futur":{je:"jaunirai",tu:"jauniras",il:"jaunira",nous:"jaunirons",vous:"jaunirez",ils:"jauniront"}
-      },
-      "blanchir":{
-        "présent":{je:"blanchis",tu:"blanchis",il:"blanchit",nous:"blanchissons",vous:"blanchissez",ils:"blanchissent"},
-        "imparfait":{je:"blanchissais",tu:"blanchissais",il:"blanchissait",nous:"blanchissions",vous:"blanchissiez",ils:"blanchissaient"},
-        "futur":{je:"blanchirai",tu:"blanchiras",il:"blanchira",nous:"blanchirons",vous:"blanchirez",ils:"blanchiront"}
-      },
-      "noircir":{
-        "présent":{je:"noircis",tu:"noircis",il:"noircit",nous:"noircissons",vous:"noircissez",ils:"noircissent"},
-        "imparfait":{je:"noircissais",tu:"noircissais",il:"noircissait",nous:"noircissions",vous:"noircissiez",ils:"noircissaient"},
-        "futur":{je:"noircirai",tu:"noirciras",il:"noircira",nous:"noircirons",vous:"noircirez",ils:"noirciront"}
-      },
-      "grandir":{
-        "présent":{je:"grandis",tu:"grandis",il:"grandit",nous:"grandissons",vous:"grandissez",ils:"grandissent"},
-        "imparfait":{je:"grandissais",tu:"grandissais",il:"grandissait",nous:"grandissions",vous:"grandissiez",ils:"grandissaient"},
-        "futur":{je:"grandirai",tu:"grandiras",il:"grandira",nous:"grandirons",vous:"grandirez",ils:"grandiront"}
-      },
-      "rougir":{
-        "présent":{je:"rougis",tu:"rougis",il:"rougit",nous:"rougissons",vous:"rougissez",ils:"rougissent"},
-        "imparfait":{je:"rougissais",tu:"rougissais",il:"rougissait",nous:"rougissions",vous:"rougissiez",ils:"rougissaient"},
-        "futur":{je:"rougirai",tu:"rougiras",il:"rougira",nous:"rougirons",vous:"rougirez",ils:"rougiront"}
-      },
-      "obéir":{
-        "présent":{je:"obéis",tu:"obéis",il:"obéit",nous:"obéissons",vous:"obéissez",ils:"obéissent"},
-        "imparfait":{je:"obéissais",tu:"obéissais",il:"obéissait",nous:"obéissions",vous:"obéissiez",ils:"obéissaient"},
-        "futur":{je:"obéirai",tu:"obéiras",il:"obéira",nous:"obéirons",vous:"obéirez",ils:"obéiront"}
-      },
-      "réussir":{
-        "présent":{je:"réussis",tu:"réussis",il:"réussit",nous:"réussissons",vous:"réussissez",ils:"réussissent"},
-        "imparfait":{je:"réussissais",tu:"réussissais",il:"réussissait",nous:"réussissions",vous:"réussissiez",ils:"réussissaient"},
-        "futur":{je:"réussirai",tu:"réussiras",il:"réussira",nous:"réussirons",vous:"réussirez",ils:"réussiront"}
-      },
-      "vieillir":{
-        "présent":{je:"vieillis",tu:"vieillis",il:"vieillit",nous:"vieillissons",vous:"vieillissez",ils:"vieillissent"},
-        "imparfait":{je:"vieillissais",tu:"vieillissais",il:"vieillissait",nous:"vieillissions",vous:"vieillissiez",ils:"vieillissaient"},
-        "futur":{je:"vieillirai",tu:"vieilliras",il:"vieillira",nous:"vieillirons",vous:"vieillirez",ils:"vieilliront"}
-      },
-      "jaunir":{
-        "présent":{je:"jaunis",tu:"jaunis",il:"jaunit",nous:"jaunissons",vous:"jaunissez",ils:"jaunissent"},
-        "imparfait":{je:"jaunissais",tu:"jaunissais",il:"jaunissait",nous:"jaunissions",vous:"jaunissiez",ils:"jaunissaient"},
-        "futur":{je:"jaunirai",tu:"jauniras",il:"jaunira",nous:"jaunirons",vous:"jaunirez",ils:"jauniront"}
-      },
-      "blanchir":{
-        "présent":{je:"blanchis",tu:"blanchis",il:"blanchit",nous:"blanchissons",vous:"blanchissez",ils:"blanchissent"},
-        "imparfait":{je:"blanchissais",tu:"blanchissais",il:"blanchissait",nous:"blanchissions",vous:"blanchissiez",ils:"blanchissaient"},
-        "futur":{je:"blanchirai",tu:"blanchiras",il:"blanchira",nous:"blanchirons",vous:"blanchirez",ils:"blanchiront"}
-      },
-      "noircir":{
-        "présent":{je:"noircis",tu:"noircis",il:"noircit",nous:"noircissons",vous:"noircissez",ils:"noircissent"},
-        "imparfait":{je:"noircissais",tu:"noircissais",il:"noircissait",nous:"noircissions",vous:"noircissiez",ils:"noircissaient"},
-        "futur":{je:"noircirai",tu:"noirciras",il:"noircira",nous:"noircirons",vous:"noircirez",ils:"noirciront"}
-      },
-      "rendre":{
-        "présent":{je:"rends",tu:"rends",il:"rend",nous:"rendons",vous:"rendez",ils:"rendent"},
-        "imparfait":{je:"rendais",tu:"rendais",il:"rendait",nous:"rendions",vous:"rendiez",ils:"rendaient"},
-        "futur":{je:"rendrai",tu:"rendras",il:"rendra",nous:"rendrons",vous:"rendrez",ils:"rendront"}
+        "présent":{je:"rends",tu:"rends",il:"rend",elle:"rend",nous:"rendons",vous:"rendez",ils:"rendent",elles:"rendent"},
+        "imparfait":{je:"rendais",tu:"rendais",il:"rendait",elle:"rendait",nous:"rendions",vous:"rendiez",ils:"rendaient",elles:"rendaient"},
+        "futur":{je:"rendrai",tu:"rendras",il:"rendra",elle:"rendra",nous:"rendrons",vous:"rendrez",ils:"rendront",elles:"rendront"}
       },
       "vendre":{
-        "présent":{je:"vends",tu:"vends",il:"vend",nous:"vendons",vous:"vendez",ils:"vendent"},
-        "imparfait":{je:"vendais",tu:"vendais",il:"vendait",nous:"vendions",vous:"vendie
+        "présent":{je:"vends",tu:"vends",il:"vend",elle:"vend",nous:"vendons",vous:"vendez",ils:"vendent",elles:"vendent"},
+        "imparfait":{je:"vendais",tu:"vendais",il:"vendait",elle:"vendait",nous:"vendions",vous:"vendiez",ils:"vendaient",elles:"vendaient"},
+        "futur":{je:"vendrai",tu:"vendras",il:"vendra",elle:"vendra",nous:"vendrons",vous:"vendrez",ils:"vendront",elles:"vendront"}
+      },
+      "attendre":{
+        "présent":{je:"attends",tu:"attends",il:"attend",elle:"attend",nous:"attendons",vous:"attendez",ils:"attendent",elles:"attendent"},
+        "imparfait":{je:"attendais",tu:"attendais",il:"attendait",elle:"attendait",nous:"attendions",vous:"attendiez",ils:"attendaient",elles:"attendaient"},
+        "futur":{je:"attendrai",tu:"attendras",il:"attendra",elle:"attendra",nous:"attendrons",vous:"attendrez",ils:"attendront",elles:"attendront"}
+      },
+      "descendre":{
+        "présent":{je:"descends",tu:"descends",il:"descend",elle:"descend",nous:"descendons",vous:"descendez",ils:"descendent",elles:"descendent"},
+        "imparfait":{je:"descendais",tu:"descendais",il:"descendait",elle:"descendait",nous:"descendions",vous:"descendiez",ils:"descendaient",elles:"descendaient"},
+        "futur":{je:"descendrai",tu:"descendras",il:"descendra",elle:"descendra",nous:"descendrons",vous:"descendrez",ils:"descendront",elles:"descendront"}
+      },
+      "perdre":{
+        "présent":{je:"perds",tu:"perds",il:"perd",elle:"perd",nous:"perdons",vous:"perdez",ils:"perdent",elles:"perdent"},
+        "imparfait":{je:"perdais",tu:"perdais",il:"perdait",elle:"perdait",nous:"perdions",vous:"perdiez",ils:"perdaient",elles:"perdaient"},
+        "futur":{je:"perdrai",tu:"perdras",il:"perdra",elle:"perdra",nous:"perdrons",vous:"perdrez",ils:"perdront",elles:"perdront"}
+      },
+      "entendre":{
+        "présent":{je:"entends",tu:"entends",il:"entend",elle:"entend",nous:"entendons",vous:"entendez",ils:"entendent",elles:"entendent"},
+        "imparfait":{je:"entendais
