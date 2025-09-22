@@ -261,11 +261,6 @@
         "imparfait":{je:"voyais",tu:"voyais",il:"voyait",elle:"voyait",nous:"voyions",vous:"voyiez",ils:"voyaient",elles:"voyaient"},
         "futur":{je:"verrai",tu:"verras",il:"verra",elle:"verra",nous:"verrons",vous:"verrez",ils:"verront",elles:"verront"}
       },
-      "aller":{
-        "présent":{je:"vais",tu:"vas",il:"va",elle:"va",nous:"allons",vous:"allez",ils:"vont",elles:"vont"},
-        "imparfait":{je:"allais",tu:"allais",il:"allait",elle:"allait",nous:"allions",vous:"alliez",ils:"allaient",elles:"allaient"},
-        "futur":{je:"irai",tu:"iras",il:"ira",elle:"ira",nous:"irons",vous:"irez",ils:"iront",elles:"iront"}
-      },
       "venir":{
         "présent":{je:"viens",tu:"viens",il:"vient",elle:"vient",nous:"venons",vous:"venez",ils:"viennent",elles:"viennent"},
         "imparfait":{je:"venais",tu:"venais",il:"venait",elle:"venait",nous:"venions",vous:"veniez",ils:"venaient",elles:"venaient"},
@@ -379,21 +374,21 @@
       const stem=verb.slice(0,-2);
       if(tense==='présent'){
         const endings={je:'e',tu:'es',il:'e',elle:'e',nous:'ons',vous:'ez',ils:'ent',elles:'ent'};
-        const form=(pron==='je' ? 'j\'' : pron)+' '+stem+endings[pron];
+        let form=(pron==='je' ? 'j\'' : pron)+' '+stem+endings[pron];
         /* apostrophe si voyelle */
-        if(pron==='je' && 'aeiouéèêàâôûù'.includes(stem[0])) return 'j\''+stem+endings[pron];
+        if(pron==='je' && 'aeiouéèêàâôûù'.includes(stem[0])) form='j\''+stem+endings[pron];
         return form;
       }
       if(tense==='imparfait'){
         const endings={je:'ais',tu:'ais',il:'ait',elle:'ait',nous:'ions',vous:'iez',ils:'aient',elles:'aient'};
-        const form=(pron==='je' ? 'j\'' : pron)+' '+stem+endings[pron];
-        if(pron==='je' && 'aeiouéèêàâôûù'.includes(stem[0])) return 'j\''+stem+endings[pron];
+        let form=(pron==='je' ? 'j\'' : pron)+' '+stem+endings[pron];
+        if(pron==='je' && 'aeiouéèêàâôûù'.includes(stem[0])) form='j\''+stem+endings[pron];
         return form;
       }
       if(tense==='futur'){
         const endings={je:'ai',tu:'as',il:'a',elle:'a',nous:'ons',vous:'ez',ils:'ont',elles:'ont'};
-        const form=(pron==='je' ? 'j\'' : pron)+' '+verb+endings[pron];
-        if(pron==='je' && 'aeiouéèêàâôûù'.includes(verb[0])) return 'j\''+verb+endings[pron];
+        let form=(pron==='je' ? 'j\'' : pron)+' '+verb+endings[pron];
+        if(pron==='je' && 'aeiouéèêàâôûù'.includes(verb[0])) form='j\''+verb+endings[pron];
         return form;
       }
       return`${pron==='je'?"j'":pron} ${verb}_${tense}`;
@@ -467,7 +462,9 @@
       if(isOk){
         currentScore+=5;document.getElementById('currentScore').textContent=currentScore;
         const msgs=['Bravo !','C\'est super !','Formidable !','C\'est génial !','Excellent !'];
-        showMessage(msgs[Math.floor(Math.random()*msgs.length)],'success');
+        const msg=msgs[Math.floor(Math.random()*msgs.length)];
+        showMessage(msg,'success');
+        speak(msg); // 🔊 message vocal de félicitations
         const ts=parseInt(document.getElementById('totalScore').textContent)+5;
         const tq=parseInt(document.getElementById('totalQuestions').textContent)+1;
         document.getElementById('totalScore').textContent=ts;
@@ -476,9 +473,10 @@
         setTimeout(()=>generateQuestion(),2000);
       }else{
         currentScore=Math.max(0,currentScore-5);document.getElementById('currentScore').textContent=currentScore;
-        speak('Erreur');
         const msgs=['Tu peux le faire !','Allez, continue !','Réfléchis bien !','Essaye encore !','Ne te décourage pas !'];
-        showMessage(msgs[Math.floor(Math.random()*msgs.length)],'error');
+        const msg=msgs[Math.floor(Math.random()*msgs.length)];
+        showMessage(msg,'error');
+        speak(msg); // 🔊 message d'encouragement
         document.getElementById('answerInput').value='';
         /* relance l'écoute automatique en mode voix */
         if(mode==='voice') setTimeout(()=>startRecording(),1000);
