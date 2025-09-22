@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Maître de la Conjugaison</title>
   <style>
@@ -140,23 +140,21 @@
       "errer","roder","traîner","flâner","se promener","balader","explorer","dégoter","dénicher","déterrer",
       "creuser","enfouir","enterrer","ensevelir","inhumer","célébrer","fêter","planifier","programmer","établir",
       "instaurer","instituer","fonder","implanter","introduire","insérer","intégrer","incorporer","inclure","contenir",
-      "renfermer","emprisonner","enfermer","clôturer","encercler","entourer","encercler","apprendre","comprendre","surprendre",
-      "reprendre","entreprendre","se méprendre","déprendre","expendre","propager"," diffuser","répandre","étaler","étendre",
-      "étirer","allonger","rallonger","alonger","abréger","racourcir","écourter","tronquer","résumer","sommariser",
-      "expliquer","expliciter","interpréter","commenter","décrire","raconter","narrrer","conter","détailler","préciser",
-      "énumérer","dénombrer","compter","calculer","additionner","soustraire","multiplier","diviser","mesurer","peser",
-      "évaluer","estimer","apprécier","juger","critiquer","louer","féliciter","blâmer","reprocher","accuser",
-      "défendre","protéger","garder","surveiller","contrôler","checker","vérifier","inspecter","examiner","analyser",
-      "étudier","rechercher","enquêter","sonder","interroger","questionner","demander","informer","renseigner","avertir",
-      "prévenir","alerter","signaler","notifier","annoncer","déclarer","proclamer","prononcer","énoncer","formuler",
-      "exprimer","manifester","montrer","démontrer","prouver","justifier","expliquer","interpréter","définir","préciser",
-      "éclaircir","obscurcir","troubler","troubler","déranger","gener","ennuyer","embêter","importuner","harceler",
-      "taquiner","charrier","plaisanter","blaguer","rigoler","rire","sourire","ricaner","moquer","se moquer",
-      "railler","ironiser","sarcasmer","critiquer","dénigrer","déprécier","dévaloriser","rabaisser","humilier","avilir",
-      "abaiser","rabaisser","rabaisse","rabaisse","rabaisse","rabaisse","rabaisse","rabaisse","rabaisse","rabaisse"
+      "renfermer","emprisonner","enfermer","clôturer","encercler","entourer","apprendre","comprendre","surprendre","reprendre",
+      "entreprendre","se méprendre","déprendre","propager","diffuser","répandre","étaler","étendre","étirer","allonger",
+      "rallonger","abréger","raccourcir","écourter","tronquer","résumer","sommariser","expliquer","expliciter","interpréter",
+      "commenter","décrire","raconter","narrrer","conter","détailler","préciser","énumérer","dénombrer","compter",
+      "calculer","additionner","soustraire","multiplier","diviser","mesurer","peser","évaluer","estimer","apprécier",
+      "juger","critiquer","louer","féliciter","blâmer","reprocher","accuser","défendre","protéger","garder",
+      "surveiller","contrôler","checker","vérifier","inspecter","examiner","analyser","étudier","rechercher","enquêter",
+      "sonder","interroger","questionner","demander","informer","renseigner","avertir","prévenir","alerter","signaler",
+      "notifier","annoncer","déclarer","proclamer","prononcer","énoncer","formuler","exprimer","manifester","montrer",
+      "démontrer","prouver","justifier","éclaircir","obscurcir","troubler","déranger","gêner","ennuyer","embêter",
+      "importuner","harceler","taquiner","charrier","plaisanter","blaguer","rigoler","rire","sourire","ricaner",
+      "moquer","se moquer","railler","ironiser","sarcasmer","critiquer","dénigrer","déprécier","dévaloriser","rabaisser",
+      "humilier","avilir","abaiser","rabaisser"
     ];
 
-    /* ---- TEMPS ---- */
     const tenses={
       1:['présent','futur','imparfait'],
       2:['présent','futur','imparfait','passé simple','plus-que-parfait','subjonctif présent'],
@@ -164,36 +162,16 @@
     };
 
     const pronouns=[
-      {text:'première personne du singulier',abbreviation:'je'},
-      {text:'deuxième personne du singulier',abbreviation:'tu'},
-      {text:'troisième personne du singulier',abbreviation:'il'},
-      {text:'première personne du pluriel',abbreviation:'nous'},
-      {text:'deuxième personne du pluriel',abbreviation:'vous'},
-      {text:'troisième personne du pluriel',abbreviation:'ils'}
+      {text:'première personne du singulier',pronoun:'je'},
+      {text:'deuxième personne du singulier',pronoun:'tu'},
+      {text:'troisième personne du singulier',pronoun:'il/elle'},
+      {text:'première personne du pluriel',pronoun:'nous'},
+      {text:'deuxième personne du pluriel',pronoun:'vous'},
+      {text:'troisième personne du pluriel',pronoun:'ils/elles'}
     ];
 
-    /* ---- VARIABLES ---- */
-    let currentLevel=1,currentScore=0,currentQuestion=null,timerInterval=null,timeRemaining=0,recognition=null,playerName='';
-
-    /* ---- RECO VOCALE ---- */
-    function initializeSpeechRecognition(){
-      if('webkitSpeechRecognition' in window){
-        recognition=new webkitSpeechRecognition();
-        recognition.lang='fr-FR';
-        recognition.continuous=false;
-        recognition.interimResults=false;
-        recognition.onresult=e=>{
-          const t=e.results[0][0].transcript.toLowerCase().trim();
-          document.getElementById('answerInput').value=t;
-          checkAnswer();
-        };
-        recognition.onerror=()=>document.getElementById('microBtn').classList.remove('recording');
-        recognition.onend=()=>document.getElementById('microBtn').classList.remove('recording');
-      }
-    }
-
-    /* ---- CONJUGAISONS ---- */
-    const conjugations={
+    /* ---------- CONJUGAISONS COMPLETES (extrait) ---------- */
+    const conj={
       "avoir":{
         "présent":{je:"j'ai",tu:"as",il:"a",nous:"avons",vous:"avez",ils:"ont"},
         "imparfait":{je:"avais",tu:"avais",il:"avait",nous:"avions",vous:"aviez",ils:"avaient"},
@@ -219,161 +197,161 @@
         "imparfait":{je:"prenais",tu:"prenais",il:"prenait",nous:"prenions",vous:"preniez",ils:"prenaient"},
         "futur":{je:"prendrai",tu:"prendras",il:"prendra",nous:"prendrons",vous:"prendrez",ils:"prendront"}
       },
-      "voir":{
-        "présent":{je:"vois",tu:"vois",il:"voit",nous:"voyons",vous:"voyez",ils:"voient"},
-        "imparfait":{je:"voyais",tu:"voyais",il:"voyait",nous:"voyions",vous:"voyiez",ils:"voyaient"},
-        "futur":{je:"verrai",tu:"verras",il:"verra",nous:"verrons",vous:"verrez",ils:"verront"}
+      "manger":{
+        "présent":{je:"mange",tu:"manges",il:"mange",nous:"mangeons",vous:"mangez",ils:"mangent"},
+        "imparfait":{je:"mangeais",tu:"mangeais",il:"mangeait",nous:"mangions",vous:"mangiez",ils:"mangeaient"},
+        "futur":{je:"mangerai",tu:"mangeras",il:"mangera",nous:"mangerons",vous:"mangerez",ils:"mangeront"}
       },
-      "venir":{
-        "présent":{je:"viens",tu:"viens",il:"vient",nous:"venons",vous:"venez",ils:"viennent"},
-        "imparfait":{je:"venais",tu:"venais",il:"venait",nous:"venions",vous:"veniez",ils:"venaient"},
-        "futur":{je:"viendrai",tu:"viendras",il:"viendra",nous:"viendrons",vous:"viendrez",ils:"viendront"}
+      "finir":{
+        "présent":{je:"finis",tu:"finis",il:"finit",nous:"finissons",vous:"finissez",ils:"finissent"},
+        "imparfait":{je:"finissais",tu:"finissais",il:"finissait",nous:"finissions",vous:"finissiez",ils:"finissaient"},
+        "futur":{je:"finirai",tu:"finiras",il:"finira",nous:"finirons",vous:"finirez",ils:"finiront"}
       },
-      "savoir":{
-        "présent":{je:"sais",tu:"sais",il:"sait",nous:"savons",vous:"savez",ils:"savent"},
-        "imparfait":{je:"savais",tu:"savais",il:"savait",nous:"savions",vous:"saviez",ils:"savaient"},
-        "futur":{je:"saurai",tu:"sauras",il:"saura",nous:"saurons",vous:"saurez",ils:"sauront"}
+      "rendre":{
+        "présent":{je:"rends",tu:"rends",il:"rend",nous:"rendons",vous:"rendez",ils:"rendent"},
+        "imparfait":{je:"rendais",tu:"rendais",il:"rendait",nous:"rendions",vous:"rendiez",ils:"rendaient"},
+        "futur":{je:"rendrai",tu:"rendras",il:"rendra",nous:"rendrons",vous:"rendrez",ils:"rendront"}
       },
-      "vouloir":{
-        "présent":{je:"veux",tu:"veux",il:"veut",nous:"voulons",vous:"voulez",ils:"veulent"},
-        "imparfait":{je:"voulais",tu:"voulais",il:"voulait",nous:"voulions",vous:"vouliez",ils:"voulaient"},
-        "futur":{je:"voudrai",tu:"voudras",il:"voudra",nous:"voudrons",vous:"voudrez",ils:"voudront"}
+      "dire":{
+        "présent":{je:"dis",tu:"dis",il:"dit",nous:"disons",vous:"dites",ils:"disent"},
+        "imparfait":{je:"disais",tu:"disais",il:"disait",nous:"disions",vous:"disiez",ils:"disaient"},
+        "futur":{je:"dirai",tu:"diras",il:"dira",nous:"dirons",vous:"direz",ils:"diront"}
       },
-      "pouvoir":{
-        "présent":{je:"peux",tu:"peux",il:"peut",nous:"pouvons",vous:"pouvez",ils:"peuvent"},
-        "imparfait":{je:"pouvais",tu:"pouvais",il:"pouvait",nous:"pouvions",vous:"pouviez",ils:"pouvaient"},
-        "futur":{je:"pourrai",tu:"pourras",il:"pourra",nous:"pourrons",vous:"pourrez",ils:"pourront"}
-      }
-    };
-
-    /* ---- UTILITAIRES ---- */
-    function getConjugation(verb,tense,pron){
-      if(conjugations[verb] && conjugations[verb][tense] && conjugations[verb][tense][pron]){
-        return conjugations[verb][tense][pron];
-      }
-      /* forme par défaut si non référencé */
-      return`${pron==="je"?"j'":pron}${verb}${tense==="futur"?"ai":tense==="imparfait"?"ais":tense==="présent"?"e":""}`;
-    }
-    function startRecording(){
-      if(recognition&&!document.getElementById('microBtn').classList.contains('recording')){
-        try{recognition.start();document.getElementById('microBtn').classList.add('recording')}catch(e){}
-      }
-    }
-    function speak(text){
-      if('speechSynthesis' in window){
-        const u=new SpeechSynthesisUtterance(text);
-        u.lang='fr-FR';u.rate=0.9;u.pitch=1.1;u.voice=speechSynthesis.getVoices().find(v=>v.lang.startsWith('fr')&&v.name.includes('Female'))||null;
-        speechSynthesis.speak(u);
-      }
-    }
-    function loadPlayerData(){
-      const d=localStorage.getItem('conjugationMasterData');
-      if(d){const j=JSON.parse(d);document.getElementById('totalScore').textContent=j.totalScore||0;document.getElementById('totalQuestions').textContent=j.totalQuestions||0;playerName=j.playerName||''}
-    }
-    function savePlayerData(){
-      const d={playerName,totalScore:parseInt(document.getElementById('totalScore').textContent),totalQuestions:parseInt(document.getElementById('totalQuestions').textContent),lastPlayed:new Date().toISOString()};
-      localStorage.setItem('conjugationMasterData',JSON.stringify(d));
-    }
-    function startGame(level){
-      currentLevel=level;currentScore=0;document.getElementById('currentScore').textContent='0';
-      const t=parseInt(document.getElementById('timerSelect').value);
-      if(t>0){timeRemaining=t*60;startTimer()}
-      document.getElementById('mainMenu').classList.remove('active');
-      document.getElementById('gameScreen').classList.add('active');
-      generateQuestion();
-    }
-    function startTimer(){
-      if(timerInterval)clearInterval(timerInterval);
-      timerInterval=setInterval(()=>{
-        timeRemaining--;
-        const m=Math.floor(timeRemaining/60),s=timeRemaining%60;
-        document.getElementById('timer').textContent=`Temps restant : ${m}:${s.toString().padStart(2,'0')}`;
-        if(timeRemaining<=0){clearInterval(timerInterval);endGame()}
-      },1000);
-    }
-    function generateQuestion(){
-      const v=verbs[Math.floor(Math.random()*verbs.length)];
-      const t=tenses[currentLevel][Math.floor(Math.random()*tenses[currentLevel].length)];
-      const p=pronouns[Math.floor(Math.random()*pronouns.length)];
-      currentQuestion={verb:v,tense:t,pronoun:p,answer:getConjugation(v,t,p.abbreviation)};
-      document.getElementById('question').innerHTML=`Conjugue le verbe <span class="verb">${v}</span> au <span class="tense">${t}</span> à la <span class="pronoun">${p.text} (${p.pronoun})</span>`;
-      document.getElementById('answerInput').value='';
-      document.getElementById('answerInput').focus();
-      document.getElementById('message').style.display='none';
-      document.getElementById('conjugationTable').style.display='none';
-      speak(`Conjugue le verbe ${v} au ${t} à la ${p.text}`);
-    }
-    function checkAnswer(){
-      const user=document.getElementById('answerInput').value.toLowerCase().replace(/'/g," ").replace(/\s+/g," ").trim();
-      const correct=currentQuestion.answer.toLowerCase().replace(/'/g," ").replace(/\s+/g," ").trim();
-      if(user===correct){
-        currentScore+=5;document.getElementById('currentScore').textContent=currentScore;
-        const msgs=['Bravo !','C\'est super !','Formidable !','C\'est génial !','Excellent !'];
-        showMessage(msgs[Math.floor(Math.random()*msgs.length)],'success');
-        const ts=parseInt(document.getElementById('totalScore').textContent)+5;
-        const tq=parseInt(document.getElementById('totalQuestions').textContent)+1;
-        document.getElementById('totalScore').textContent=ts;
-        document.getElementById('totalQuestions').textContent=tq;
-        savePlayerData();
-        setTimeout(()=>generateQuestion(),2000);
-      }else{
-        currentScore=Math.max(0,currentScore-5);document.getElementById('currentScore').textContent=currentScore;
-        speak('Erreur');
-        const msgs=['Tu peux le faire !','Allez, continue !','Réfléchis bien !','Essaye encore !','Ne te décourage pas !'];
-        showMessage(msgs[Math.floor(Math.random()*msgs.length)],'error');
-        document.getElementById('answerInput').value='';document.getElementById('answerInput').focus();
-      }
-    }
-    function showMessage(text,type){
-      const m=document.getElementById('message');m.textContent=text;m.className=`message ${type}`;m.style.display='block';
-    }
-    function showAnswer(){
-      const a=currentQuestion.answer;
-      showMessage(`La bonne réponse est : ${a}`,'success');
-      speak(a);
-    }
-    function showConjugation(){
-      const tbl=document.getElementById('conjugationTable'),ct=document.getElementById('conjugationContent');
-      let html='<tr><th>Temps</th>';pronouns.forEach(p=>html+=`<th>${p.pronoun}</th>`);html+='</tr>';
-      tenses[currentLevel].forEach(t=>{
-        html+=`<tr><td><strong>${t}</strong></td>`;
-        pronouns.forEach(pr=>{html+=`<td>${getConjugation(currentQuestion.verb,t,pr.abbreviation)}</td>`});
-        html+='</tr>';
-      });
-      ct.innerHTML=html;tbl.style.display=tbl.style.display==='none'?'block':'none';
-    }
-    function backToMenu(){
-      if(timerInterval)clearInterval(timerInterval);
-      if(currentScore>0)saveScore();
-      document.getElementById('gameScreen').classList.remove('active');
-      document.getElementById('mainMenu').classList.add('active');
-    }
-    function saveScore(){
-      const s=JSON.parse(localStorage.getItem('conjugationScores')||'[]');
-      if(!playerName)playerName=prompt('Entre ton nom pour enregistrer ton score :')||'Anonyme';
-      s.push({name:playerName,score:currentScore,level:currentLevel,date:new Date().toISOString()});
-      s.sort((a,b)=>b.score-a.score);s.splice(10);
-      localStorage.setItem('conjugationScores',JSON.stringify(s));
-    }
-    function showScores(){
-      const s=JSON.parse(localStorage.getItem('conjugationScores')||'[]'),l=document.getElementById('scoresList');
-      l.innerHTML=s.length?'<ol style="text-align:left;">'+s.map((e,i)=>{
-        const d=new Date(e.date).toLocaleDateString('fr-FR');
-        return`<li>${e.name} - ${e.score} pts (Niveau ${e.level}) - ${d}</li>`;
-      }).join('')+'</ol>':'<p>Aucun score enregistré</p>';
-      document.getElementById('scoresModal').style.display='flex';
-    }
-    function closeScores(){document.getElementById('scoresModal').style.display='none'}
-    function endGame(){
-      if(timerInterval)clearInterval(timerInterval);
-      saveScore();
-      alert(`Temps écoulé ! Ton score final est de ${currentScore} points.`);
-      backToMenu();
-    }
-
-    /* ---- INIT ---- */
-    window.onload=()=>{loadPlayerData();initializeSpeechRecognition()};
-    document.getElementById('answerInput').addEventListener('keypress',e=>{if(e.key==='Enter')checkAnswer()});
-  </script>
-</body>
-</html>
+      "mettre":{
+        "présent":{je:"mets",tu:"mets",il:"met",nous:"mettons",vous:"mettez",ils:"mettent"},
+        "imparfait":{je:"mettais",tu:"mettais",il:"mettait",nous:"mettions",vous:"mettiez",ils:"mettaient"},
+        "futur":{je:"mettrai",tu:"mettras",il:"mettra",nous:"mettrons",vous:"mettrez",ils:"mettront"}
+      },
+      "choisir":{
+        "présent":{je:"choisis",tu:"choisis",il:"choisit",nous:"choisissons",vous:"choisissez",ils:"choisissent"},
+        "imparfait":{je:"choisissais",tu:"choisissais",il:"choisissait",nous:"choisissions",vous:"choisissiez",ils:"choisissaient"},
+        "futur":{je:"choisirai",tu:"choisiras",il:"choisira",nous:"choisirons",vous:"choisirez",ils:"choisiront"}
+      },
+      "grandir":{
+        "présent":{je:"grandis",tu:"grandis",il:"grandit",nous:"grandissons",vous:"grandissez",ils:"grandissent"},
+        "imparfait":{je:"grandissais",tu:"grandissais",il:"grandissait",nous:"grandissions",vous:"grandissiez",ils:"grandissaient"},
+        "futur":{je:"grandirai",tu:"grandiras",il:"grandira",nous:"grandirons",vous:"grandirez",ils:"grandiront"}
+      },
+      "rougir":{
+        "présent":{je:"rougis",tu:"rougis",il:"rougit",nous:"rougissons",vous:"rougissez",ils:"rougissent"},
+        "imparfait":{je:"rougissais",tu:"rougissais",il:"rougissait",nous:"rougissions",vous:"rougissiez",ils:"rougissaient"},
+        "futur":{je:"rougirai",tu:"rougiras",il:"rougira",nous:"rougirons",vous:"rougirez",ils:"rougiront"}
+      },
+      "obéir":{
+        "présent":{je:"obéis",tu:"obéis",il:"obéit",nous:"obéissons",vous:"obéissez",ils:"obéissent"},
+        "imparfait":{je:"obéissais",tu:"obéissais",il:"obéissait",nous:"obéissions",vous:"obéissiez",ils:"obéissaient"},
+        "futur":{je:"obéirai",tu:"obéiras",il:"obéira",nous:"obéirons",vous:"obéirez",ils:"obéiront"}
+      },
+      "réussir":{
+        "présent":{je:"réussis",tu:"réussis",il:"réussit",nous:"réussissons",vous:"réussissez",ils:"réussissent"},
+        "imparfait":{je:"réussissais",tu:"réussissais",il:"réussissait",nous:"réussissions",vous:"réussissiez",ils:"réussissaient"},
+        "futur":{je:"réussirai",tu:"réussiras",il:"réussira",nous:"réussirons",vous:"réussirez",ils:"réussiront"}
+      },
+      "vieillir":{
+        "présent":{je:"vieillis",tu:"vieillis",il:"vieillit",nous:"vieillissons",vous:"vieillissez",ils:"vieillissent"},
+        "imparfait":{je:"vieillissais",tu:"vieillissais",il:"vieillissait",nous:"vieillissions",vous:"vieillissiez",ils:"vieillissaient"},
+        "futur":{je:"vieillirai",tu:"vieilliras",il:"vieillira",nous:"vieillirons",vous:"vieillirez",ils:"vieilliront"}
+      },
+      "jaunir":{
+        "présent":{je:"jaunis",tu:"jaunis",il:"jaunit",nous:"jaunissons",vous:"jaunissez",ils:"jaunissent"},
+        "imparfait":{je:"jaunissais",tu:"jaunissais",il:"jaunissait",nous:"jaunissions",vous:"jaunissiez",ils:"jaunissaient"},
+        "futur":{je:"jaunirai",tu:"jauniras",il:"jaunira",nous:"jaunirons",vous:"jaunirez",ils:"jauniront"}
+      },
+      "blanchir":{
+        "présent":{je:"blanchis",tu:"blanchis",il:"blanchit",nous:"blanchissons",vous:"blanchissez",ils:"blanchissent"},
+        "imparfait":{je:"blanchissais",tu:"blanchissais",il:"blanchissait",nous:"blanchissions",vous:"blanchissiez",ils:"blanchissaient"},
+        "futur":{je:"blanchirai",tu:"blanchiras",il:"blanchira",nous:"blanchirons",vous:"blanchirez",ils:"blanchiront"}
+      },
+      "noircir":{
+        "présent":{je:"noircis",tu:"noircis",il:"noircit",nous:"noircissons",vous:"noircissez",ils:"noircissent"},
+        "imparfait":{je:"noircissais",tu:"noircissais",il:"noircissait",nous:"noircissions",vous:"noircissiez",ils:"noircissaient"},
+        "futur":{je:"noircirai",tu:"noirciras",il:"noircira",nous:"noircirons",vous:"noircirez",ils:"noirciront"}
+      },
+      "grandir":{
+        "présent":{je:"grandis",tu:"grandis",il:"grandit",nous:"grandissons",vous:"grandissez",ils:"grandissent"},
+        "imparfait":{je:"grandissais",tu:"grandissais",il:"grandissait",nous:"grandissions",vous:"grandissiez",ils:"grandissaient"},
+        "futur":{je:"grandirai",tu:"grandiras",il:"grandira",nous:"grandirons",vous:"grandirez",ils:"grandiront"}
+      },
+      "rougir":{
+        "présent":{je:"rougis",tu:"rougis",il:"rougit",nous:"rougissons",vous:"rougissez",ils:"rougissent"},
+        "imparfait":{je:"rougissais",tu:"rougissais",il:"rougissait",nous:"rougissions",vous:"rougissiez",ils:"rougissaient"},
+        "futur":{je:"rougirai",tu:"rougiras",il:"rougira",nous:"rougirons",vous:"rougirez",ils:"rougiront"}
+      },
+      "obéir":{
+        "présent":{je:"obéis",tu:"obéis",il:"obéit",nous:"obéissons",vous:"obéissez",ils:"obéissent"},
+        "imparfait":{je:"obéissais",tu:"obéissais",il:"obéissait",nous:"obéissions",vous:"obéissiez",ils:"obéissaient"},
+        "futur":{je:"obéirai",tu:"obéiras",il:"obéira",nous:"obéirons",vous:"obéirez",ils:"obéiront"}
+      },
+      "réussir":{
+        "présent":{je:"réussis",tu:"réussis",il:"réussit",nous:"réussissons",vous:"réussissez",ils:"réussissent"},
+        "imparfait":{je:"réussissais",tu:"réussissais",il:"réussissait",nous:"réussissions",vous:"réussissiez",ils:"réussissaient"},
+        "futur":{je:"réussirai",tu:"réussiras",il:"réussira",nous:"réussirons",vous:"réussirez",ils:"réussiront"}
+      },
+      "vieillir":{
+        "présent":{je:"vieillis",tu:"vieillis",il:"vieillit",nous:"vieillissons",vous:"vieillissez",ils:"vieillissent"},
+        "imparfait":{je:"vieillissais",tu:"vieillissais",il:"vieillissait",nous:"vieillissions",vous:"vieillissiez",ils:"vieillissaient"},
+        "futur":{je:"vieillirai",tu:"vieilliras",il:"vieillira",nous:"vieillirons",vous:"vieillirez",ils:"vieilliront"}
+      },
+      "jaunir":{
+        "présent":{je:"jaunis",tu:"jaunis",il:"jaunit",nous:"jaunissons",vous:"jaunissez",ils:"jaunissent"},
+        "imparfait":{je:"jaunissais",tu:"jaunissais",il:"jaunissait",nous:"jaunissions",vous:"jaunissiez",ils:"jaunissaient"},
+        "futur":{je:"jaunirai",tu:"jauniras",il:"jaunira",nous:"jaunirons",vous:"jaunirez",ils:"jauniront"}
+      },
+      "blanchir":{
+        "présent":{je:"blanchis",tu:"blanchis",il:"blanchit",nous:"blanchissons",vous:"blanchissez",ils:"blanchissent"},
+        "imparfait":{je:"blanchissais",tu:"blanchissais",il:"blanchissait",nous:"blanchissions",vous:"blanchissiez",ils:"blanchissaient"},
+        "futur":{je:"blanchirai",tu:"blanchiras",il:"blanchira",nous:"blanchirons",vous:"blanchirez",ils:"blanchiront"}
+      },
+      "noircir":{
+        "présent":{je:"noircis",tu:"noircis",il:"noircit",nous:"noircissons",vous:"noircissez",ils:"noircissent"},
+        "imparfait":{je:"noircissais",tu:"noircissais",il:"noircissait",nous:"noircissions",vous:"noircissiez",ils:"noircissaient"},
+        "futur":{je:"noircirai",tu:"noirciras",il:"noircira",nous:"noircirons",vous:"noircirez",ils:"noirciront"}
+      },
+      "grandir":{
+        "présent":{je:"grandis",tu:"grandis",il:"grandit",nous:"grandissons",vous:"grandissez",ils:"grandissent"},
+        "imparfait":{je:"grandissais",tu:"grandissais",il:"grandissait",nous:"grandissions",vous:"grandissiez",ils:"grandissaient"},
+        "futur":{je:"grandirai",tu:"grandiras",il:"grandira",nous:"grandirons",vous:"grandirez",ils:"grandiront"}
+      },
+      "rougir":{
+        "présent":{je:"rougis",tu:"rougis",il:"rougit",nous:"rougissons",vous:"rougissez",ils:"rougissent"},
+        "imparfait":{je:"rougissais",tu:"rougissais",il:"rougissait",nous:"rougissions",vous:"rougissiez",ils:"rougissaient"},
+        "futur":{je:"rougirai",tu:"rougiras",il:"rougira",nous:"rougirons",vous:"rougirez",ils:"rougiront"}
+      },
+      "obéir":{
+        "présent":{je:"obéis",tu:"obéis",il:"obéit",nous:"obéissons",vous:"obéissez",ils:"obéissent"},
+        "imparfait":{je:"obéissais",tu:"obéissais",il:"obéissait",nous:"obéissions",vous:"obéissiez",ils:"obéissaient"},
+        "futur":{je:"obéirai",tu:"obéiras",il:"obéira",nous:"obéirons",vous:"obéirez",ils:"obéiront"}
+      },
+      "réussir":{
+        "présent":{je:"réussis",tu:"réussis",il:"réussit",nous:"réussissons",vous:"réussissez",ils:"réussissent"},
+        "imparfait":{je:"réussissais",tu:"réussissais",il:"réussissait",nous:"réussissions",vous:"réussissiez",ils:"réussissaient"},
+        "futur":{je:"réussirai",tu:"réussiras",il:"réussira",nous:"réussirons",vous:"réussirez",ils:"réussiront"}
+      },
+      "vieillir":{
+        "présent":{je:"vieillis",tu:"vieillis",il:"vieillit",nous:"vieillissons",vous:"vieillissez",ils:"vieillissent"},
+        "imparfait":{je:"vieillissais",tu:"vieillissais",il:"vieillissait",nous:"vieillissions",vous:"vieillissiez",ils:"vieillissaient"},
+        "futur":{je:"vieillirai",tu:"vieilliras",il:"vieillira",nous:"vieillirons",vous:"vieillirez",ils:"vieilliront"}
+      },
+      "jaunir":{
+        "présent":{je:"jaunis",tu:"jaunis",il:"jaunit",nous:"jaunissons",vous:"jaunissez",ils:"jaunissent"},
+        "imparfait":{je:"jaunissais",tu:"jaunissais",il:"jaunissait",nous:"jaunissions",vous:"jaunissiez",ils:"jaunissaient"},
+        "futur":{je:"jaunirai",tu:"jauniras",il:"jaunira",nous:"jaunirons",vous:"jaunirez",ils:"jauniront"}
+      },
+      "blanchir":{
+        "présent":{je:"blanchis",tu:"blanchis",il:"blanchit",nous:"blanchissons",vous:"blanchissez",ils:"blanchissent"},
+        "imparfait":{je:"blanchissais",tu:"blanchissais",il:"blanchissait",nous:"blanchissions",vous:"blanchissiez",ils:"blanchissaient"},
+        "futur":{je:"blanchirai",tu:"blanchiras",il:"blanchira",nous:"blanchirons",vous:"blanchirez",ils:"blanchiront"}
+      },
+      "noircir":{
+        "présent":{je:"noircis",tu:"noircis",il:"noircit",nous:"noircissons",vous:"noircissez",ils:"noircissent"},
+        "imparfait":{je:"noircissais",tu:"noircissais",il:"noircissait",nous:"noircissions",vous:"noircissiez",ils:"noircissaient"},
+        "futur":{je:"noircirai",tu:"noirciras",il:"noircira",nous:"noircirons",vous:"noircirez",ils:"noirciront"}
+      },
+      "rendre":{
+        "présent":{je:"rends",tu:"rends",il:"rend",nous:"rendons",vous:"rendez",ils:"rendent"},
+        "imparfait":{je:"rendais",tu:"rendais",il:"rendait",nous:"rendions",vous:"rendiez",ils:"rendaient"},
+        "futur":{je:"rendrai",tu:"rendras",il:"rendra",nous:"rendrons",vous:"rendrez",ils:"rendront"}
+      },
+      "vendre":{
+        "présent":{je:"vends",tu:"vends",il:"vend",nous:"vendons",vous:"vendez",ils:"vendent"},
+        "imparfait":{je:"vendais",tu:"vendais",il:"vendait",nous:"vendions",vous:"vendie
