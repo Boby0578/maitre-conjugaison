@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maître de la Conjugaison</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,771 +12,512 @@
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Écran d'accueil */
-        .home-screen {
-            text-align: center;
-            padding: 50px 20px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 30px;
             backdrop-filter: blur(10px);
-            margin: 20px;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            max-width: 800px;
+            width: 90%;
         }
 
-        .title {
-            font-size: 3.5rem;
-            font-weight: 700;
-            background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
-            background-size: 300% 300%;
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: gradient 3s ease infinite;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .menu {
+            display: none;
+            text-align: center;
         }
 
-        .subtitle {
-            font-size: 1.2rem;
-            color: white;
-            margin-bottom: 40px;
-            font-weight: 300;
+        .menu.active {
+            display: block;
         }
 
         .level-selection {
             display: flex;
             justify-content: center;
             gap: 20px;
-            margin-bottom: 30px;
+            margin: 20px 0;
             flex-wrap: wrap;
         }
 
-        .level-btn {
+        .btn {
             padding: 15px 30px;
             border: none;
-            border-radius: 25px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            border-radius: 50px;
+            font-size: 1.1em;
             cursor: pointer;
             transition: all 0.3s ease;
-            color: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px 0 rgba(31, 38, 135, 0.2);
         }
 
-        .level-btn:nth-child(1) { background: linear-gradient(135deg, #667eea, #764ba2); }
-        .level-btn:nth-child(2) { background: linear-gradient(135deg, #f093fb, #f5576c); }
-        .level-btn:nth-child(3) { background: linear-gradient(135deg, #4facfe, #00f2fe); }
-
-        .level-btn:hover {
+        .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 20px 0 rgba(31, 38, 135, 0.4);
         }
 
-        .timer-selection {
-            margin-top: 20px;
+        .btn:active {
+            transform: translateY(-1px);
         }
 
-        .timer-btn {
-            padding: 10px 20px;
-            margin: 5px;
-            border: 2px solid white;
-            background: transparent;
+        .btn-level {
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
             color: white;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
         }
 
-        .timer-btn:hover, .timer-btn.active {
-            background: white;
-            color: #667eea;
+        .btn-level:hover {
+            background: linear-gradient(45deg, #00f2fe 0%, #4facfe 100%);
         }
 
-        .start-btn {
-            padding: 20px 50px;
-            font-size: 1.3rem;
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        .btn-start {
+            background: linear-gradient(45deg, #43e97b 0%, #38f9d7 100%);
             color: white;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 30px;
-            font-weight: 600;
-            box-shadow: 0 6px 20px rgba(238, 90, 36, 0.4);
+            font-size: 1.3em;
+            padding: 20px 40px;
         }
 
-        .start-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 30px rgba(238, 90, 36, 0.6);
+        .btn-start:hover {
+            background: linear-gradient(45deg, #38f9d7 0%, #43e97b 100%);
         }
 
-        /* Écran de jeu */
-        .game-screen {
+        .game-area {
             display: none;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 30px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-        }
-
-        .game-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .score-display {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 20px;
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        .timer-display {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 20px;
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        .question-section {
             text-align: center;
-            margin: 40px 0;
         }
 
-        .question-text {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        .verb-word { color: #ff6b6b; font-weight: 600; }
-        .tense-word { color: #48dbfb; font-weight: 600; }
-        .pronoun-word { color: #feca57; font-weight: 600; }
-
-        .answer-input {
-            width: 100%;
-            max-width: 400px;
-            padding: 15px 20px;
-            font-size: 1.2rem;
-            border: 3px solid #e0e0e0;
-            border-radius: 25px;
-            text-align: center;
-            transition: all 0.3s ease;
-            margin: 20px auto;
+        .game-area.active {
             display: block;
         }
 
-        .answer-input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        .question {
+            font-size: 1.5em;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            line-height: 1.6;
         }
 
+        .verb { color: #f093fb; }
+        .tense { color: #4facfe; }
+        .pronoun { color: #43e97b; }
+
         .microphone-container {
-            text-align: center;
             margin: 30px 0;
         }
 
-        .microphone-btn {
+        .microphone {
             width: 80px;
             height: 80px;
             border-radius: 50%;
+            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
             border: none;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            font-size: 2rem;
             cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 4px 15px 0 rgba(245, 87, 108, 0.4);
         }
 
-        .microphone-btn:hover {
+        .microphone:hover {
             transform: scale(1.1);
-            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
         }
 
-        .microphone-btn.recording {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        .microphone.recording {
             animation: pulse 1.5s infinite;
         }
 
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7); }
-            70% { box-shadow: 0 0 0 20px rgba(255, 107, 107, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(245, 87, 108, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(245, 87, 108, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(245, 87, 108, 0); }
         }
 
-        .action-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 30px 0;
-            flex-wrap: wrap;
+        .microphone svg {
+            width: 40px;
+            height: 40px;
+            fill: white;
         }
 
-        .action-btn {
-            padding: 12px 25px;
+        .answer-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
             border: none;
-            border-radius: 20px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: white;
-        }
-
-        .show-answer-btn { background: linear-gradient(135deg, #f093fb, #f5576c); }
-        .show-table-btn { background: linear-gradient(135deg, #4facfe, #00f2fe); }
-        .next-btn { background: linear-gradient(135deg, #43e97b, #38f9d7); }
-        .restart-btn { background: linear-gradient(135deg, #fa709a, #fee140); }
-
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        }
-
-        .feedback-message {
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            margin: 20px 0;
             text-align: center;
-            font-size: 1.3rem;
-            font-weight: 600;
+        }
+
+        .score {
+            font-size: 1.3em;
             margin: 20px 0;
             padding: 15px;
-            border-radius: 20px;
-            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .message {
+            font-size: 1.2em;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .success {
-            background: linear-gradient(135deg, #43e97b, #38f9d7);
-            color: white;
+            background: linear-gradient(45deg, #43e97b 0%, #38f9d7 100%);
         }
 
         .error {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-            color: white;
+            background: linear-gradient(45deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .buttons-row {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 10px 20px;
+            font-size: 0.9em;
+        }
+
+        .btn-reveal {
+            background: linear-gradient(45deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .btn-conjugation {
+            background: linear-gradient(45deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
         }
 
         .conjugation-table {
             display: none;
-            margin: 30px 0;
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .table-title {
-            text-align: center;
-            font-size: 1.3rem;
-            color: #667eea;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-
-        .conjugation-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .tense-group {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 15px;
-        }
-
-        .tense-name {
-            font-weight: 600;
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-
-        .conjugation-item {
-            margin: 5px 0;
-            font-size: 0.9rem;
-        }
-
-        .score-table {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-            z-index: 1000;
-            max-width: 500px;
-            width: 90%;
-        }
-
-        .score-table h2 {
-            text-align: center;
-            color: #667eea;
-            margin-bottom: 20px;
-        }
-
-        .score-list {
-            max-height: 300px;
-            overflow-y: auto;
             margin: 20px 0;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            border-radius: 15px;
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
         }
 
-        .score-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            margin: 5px 0;
-            background: #f8f9fa;
-            border-radius: 10px;
+        .conjugation-table.active {
+            display: block;
         }
 
-        .name-input {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
+        .conjugation-table h3 {
+            color: #4facfe;
             margin-bottom: 15px;
         }
 
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #ff6b6b;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
-            font-size: 1.2rem;
-        }
-
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
+        .conjugation-table table {
             width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 999;
+            border-collapse: collapse;
         }
 
-        @media (max-width: 768px) {
-            .title { font-size: 2.5rem; }
-            .level-selection { flex-direction: column; align-items: center; }
-            .game-header { flex-direction: column; text-align: center; }
-            .question-text { font-size: 1.2rem; }
-            .conjugation-grid { grid-template-columns: 1fr; }
+        .conjugation-table th,
+        .conjugation-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .conjugation-table th {
+            background: #f093fb;
+            color: white;
+        }
+
+        .player-name-input {
+            padding: 10px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            margin: 10px;
+        }
+
+        .timer-selection {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .timer-display {
+            font-size: 2em;
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .leaderboard {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .leaderboard h3 {
+            margin-bottom: 15px;
+            color: #f093fb;
+        }
+
+        .leaderboard-entry {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Écran d'accueil -->
-        <div class="home-screen" id="homeScreen">
-            <h1 class="title">Maître de la Conjugaison</h1>
-            <p class="subtitle">Devenez un expert en conjugaison française</p>
-            
+        <h1>Maître de la Conjugaison</h1>
+        
+        <!-- Menu Principal -->
+        <div id="mainMenu" class="menu active">
             <div class="level-selection">
-                <button class="level-btn" onclick="selectLevel(1)">
-                    Niveau 1<br>
-                    <small>Présent, Futur, Imparfait</small>
-                </button>
-                <button class="level-btn" onclick="selectLevel(2)">
-                    Niveau 2<br>
-                    <small>+ Passé simple, Plus-que-parfait, Subjonctif</small>
-                </button>
-                <button class="level-btn" onclick="selectLevel(3)">
-                    Niveau 3<br>
-                    <small>Les 21 temps</small>
-                </button>
+                <button class="btn btn-level" onclick="selectLevel(1)">Niveau 1</button>
+                <button class="btn btn-level" onclick="selectLevel(2)">Niveau 2</button>
+                <button class="btn btn-level" onclick="selectLevel(3)">Niveau 3</button>
             </div>
-
+            
             <div class="timer-selection">
-                <p style="color: white; margin-bottom: 10px;">Choisir un temps limite :</p>
-                <button class="timer-btn" onclick="selectTimer(5)">5 min</button>
-                <button class="timer-btn" onclick="selectTimer(10)">10 min</button>
-                <button class="timer-btn" onclick="selectTimer(15)">15 min</button>
-                <button class="timer-btn active" onclick="selectTimer(0)">Sans limite</button>
+                <button class="btn btn-small" onclick="selectTimer(0)">Sans limite</button>
+                <button class="btn btn-small" onclick="selectTimer(15)">15 min</button>
+                <button class="btn btn-small" onclick="selectTimer(10)">10 min</button>
+                <button class="btn btn-small" onclick="selectTimer(5)">5 min</button>
             </div>
-
-            <button class="start-btn" onclick="startGame()">Commencer</button>
+            
+            <div>
+                <input type="text" id="playerName" class="player-name-input" placeholder="Entrez votre nom">
+            </div>
+            
+            <button class="btn btn-start" onclick="startGame()">Commencer</button>
+            
+            <div id="leaderboard" class="leaderboard">
+                <h3>Meilleurs Scores</h3>
+                <div id="leaderboardEntries"></div>
+            </div>
         </div>
-
-        <!-- Écran de jeu -->
-        <div class="game-screen" id="gameScreen">
-            <div class="game-header">
-                <div class="score-display">Score: <span id="score">0</span></div>
-                <div class="timer-display" id="timerDisplay">Temps: <span id="timer">--</span></div>
+        
+        <!-- Zone de Jeu -->
+        <div id="gameArea" class="game-area">
+            <div class="timer-display" id="timerDisplay"></div>
+            
+            <div class="score">
+                Score: <span id="scoreValue">0</span> points
             </div>
-
-            <div class="question-section">
-                <div class="question-text" id="questionText"></div>
-                <input type="text" class="answer-input" id="answerInput" placeholder="Votre réponse">
-            </div>
-
+            
+            <div id="question" class="question"></div>
+            
             <div class="microphone-container">
-                <button class="microphone-btn" id="microphoneBtn" onclick="toggleMicrophone()">
-                    🎤
+                <button id="microphone" class="microphone" onclick="toggleRecording()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                        <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                    </svg>
                 </button>
-                <p style="margin-top: 10px; color: #666;">Cliquez pour répondre à voix haute</p>
             </div>
-
-            <div class="feedback-message" id="feedbackMessage"></div>
-
-            <div class="action-buttons">
-                <button class="action-btn show-answer-btn" onclick="showAnswer()">Montrer la réponse</button>
-                <button class="action-btn show-table-btn" onclick="showConjugationTable()">Voir la conjugaison</button>
-                <button class="action-btn restart-btn" onclick="restartGame()">Recommencer</button>
+            
+            <input type="text" id="answerInput" class="answer-input" placeholder="Votre réponse ou cliquez sur le micro">
+            
+            <div id="message" class="message" style="display: none;"></div>
+            
+            <div class="buttons-row">
+                <button class="btn btn-small btn-reveal" onclick="showAnswer()">Montrer la réponse</button>
+                <button class="btn btn-small btn-conjugation" onclick="toggleConjugation()">Voir la conjugaison</button>
             </div>
-
-            <div class="conjugation-table" id="conjugationTable">
-                <div class="table-title">Conjugaison complète du verbe</div>
-                <div class="conjugation-grid" id="conjugationGrid"></div>
-            </div>
-        </div>
-
-        <!-- Tableau des scores -->
-        <div class="overlay" id="overlay"></div>
-        <div class="score-table" id="scoreTable">
-            <button class="close-btn" onclick="closeScoreTable()">×</button>
-            <h2>Tableau des scores</h2>
-            <input type="text" class="name-input" id="playerName" placeholder="Entrez votre nom">
-            <button class="action-btn" onclick="saveScore()">Sauvegarder</button>
-            <div class="score-list" id="scoreList"></div>
+            
+            <div id="conjugationTable" class="conjugation-table"></div>
         </div>
     </div>
 
     <script>
-        // Base de données de verbes avec conjugaison
-        const verbes = [
-            // 100 verbes les plus courants
-            {
-                infinitif: "avoir",
-                participes: { present: "ayant", passe: "eu" },
-                present: ["ai", "as", "a", "avons", "avez", "ont"],
-                imparfait: ["avais", "avais", "avait", "avions", "aviez", "avaient"],
-                futur: ["aurai", "auras", "aura", "aurons", "aurez", "auront"],
-                passe_simple: ["eus", "eus", "eut", "eûmes", "eûtes", "eurent"],
-                plus_que_parfait: ["avais eu", "avais eu", "avait eu", "avions eu", "aviez eu", "avaient eu"],
-                passe_compose: ["ai eu", "as eu", "a eu", "avons eu", "avez eu", "ont eu"],
-                subjonctif_present: ["aie", "aies", "ait", "ayons", "ayez", "aient"],
-                subjonctif_passe: ["aie eu", "aies eu", "ait eu", "ayons eu", "ayez eu", "aient eu"],
-                conditionnel: ["aurais", "aurais", "aurait", "aurions", "auriez", "auraient"],
-                imperatif: ["aie", "ayons", "ayez"]
-            },
-            {
-                infinitif: "être",
-                participes: { present: "étant", passe: "été" },
-                present: ["suis", "es", "est", "sommes", "êtes", "sont"],
-                imparfait: ["étais", "étais", "était", "étions", "étiez", "étaient"],
-                futur: ["serai", "seras", "sera", "serons", "serez", "seront"],
-                passe_simple: ["fus", "fus", "fut", "fûmes", "fûtes", "furent"],
-                plus_que_parfait: ["avais été", "avais été", "avait été", "avions été", "aviez été", "avaient été"],
-                passe_compose: ["ai été", "as été", "a été", "avons été", "avez été", "ont été"],
-                subjonctif_present: ["sois", "sois", "soit", "soyons", "soyez", "soient"],
-                subjonctif_passe: ["aie été", "aies été", "ait été", "ayons été", "ayez été", "aient été"],
-                conditionnel: ["serais", "serais", "serait", "serions", "seriez", "seraient"],
-                imperatif: ["sois", "soyons", "soyez"]
-            },
-            {
-                infinitif: "aller",
-                participes: { present: "allant", passe: "allé" },
-                present: ["vais", "vas", "va", "allons", "allez", "vont"],
-                imparfait: ["allais", "allais", "allait", "allions", "alliez", "allaient"],
-                futur: ["irai", "iras", "ira", "irons", "irez", "iront"],
-                passe_simple: ["allai", "allas", "alla", "allâmes", "allâtes", "allèrent"],
-                plus_que_parfait: ["avais allé", "avais allé", "avait allé", "avions allé", "aviez allé", "avaient allé"],
-                passe_compose: ["suis allé", "es allé", "est allé", "sommes allés", "êtes allés", "sont allés"],
-                subjonctif_present: ["aille", "ailles", "aille", "allions", "alliez", "aillent"],
-                subjonctif_passe: ["sois allé", "sois allé", "soit allé", "soyons allés", "soyez allés", "soient allés"],
-                conditionnel: ["irais", "irais", "irait", "irions", "iriez", "iraient"],
-                imperatif: ["va", "allons", "allez"]
-            },
-            // Ajouter plus de verbes ici...
+        // Base de données de verbes
+        const verbs = [
+            // Groupe 1 (-er)
+            "aimer", "parler", "manger", "chanter", "danser", "travailler", "étudier", "jouer", "regarder", "écouter",
+            "habiter", "arriver", "partir", "entrer", "sortir", "monter", "descendre", "tomber", "rester", "aller",
+            "venir", "retourner", "passer", "visiter", "voyager", "préparer", "organiser", "planifier", "commencer",
+            "continuer", "finir", "arrêter", "essayer", "oublier", "chercher", "trouver", "perdre", "gagner",
+            "acheter", "payer", "emprunter", "prêter", "donner", "recevoir", "apporter", "emporter", "envoyer",
+            "montrer", "présenter", "expliquer", "démontrer", "prouver", "affirmer", "déclarer", "annoncer",
+            "proposer", "suggérer", "recommander", "conseiller", "aider", "sauver", "protéger", "défendre",
+            "attaquer", "combattre", "résister", "supporter", "accepter", "refuser", "accepter", "accueillir",
+            "inviter", "remercier", "féliciter", "encourager", "motiver", "inspirer", "créer", "inventer",
+            "découvrir", "explorer", "rechercher", "analyser", "examiner", "observer", "remarquer", "noter",
+            "enregistrer", "sauvegarder", "imprimer", "copier", "coller", "couper", "détruire", "jeter",
+            "recycler", "nettoyer", "laver", "essuyer", "balayer", "ranger", "organiser", "désordonner",
+            "remplir", "vider", "ouvrir", "fermer", "verrouiller", "déverrouiller", "construire", "bâtir",
+            "détruire", "démolir", "réparer", "améliorer", "renover", "décorer", "peindre", "colorier",
+            "dessiner", "sketcher", "photographier", "filmer", "enregistrer", "jouer", "danser", "chanter",
+            "composer", "écrire", "lire", "relire", "corriger", "modifier", "éditer", "publier",
+            "imprimer", "diffuser", "transmettre", "communiquer", "discuter", "parler", "bavarder",
+            "se taire", "écouter", "entendre", "comprendre", "interpréter", "traduire", "apprendre",
+            "étudier", "réviser", "mémoriser", "retenir", "oublier", "se souvenir", "rappeler",
+            "imaginer", "rêver", "penser", "réfléchir", "méditer", "contempler", "observer", "regarder",
+            "voir", "apercevoir", "distinguer", "reconnaître", "identifier", "nommer", "désigner",
+            "choisir", "sélectionner", "opter", "décider", "déterminer", "fixer", "établir", "instaurer",
+            "introduire", "intégrer", "incorporer", "inclure", "exclure", "éliminer", "supprimer",
+            "effacer", "annuler", "retirer", "reprendre", "récupérer", "récupérer", "récupérer",
+            
+            // Groupe 2 (-ir)
+            "finir", "choisir", "grandir", "vieillir", "maigrir", "grossir", "rougir", "pâlir",
+            "jaunir", "noircir", "blanchir", "ramollir", "durcir", "affaiblir", "fortifier",
+            "enrichir", "appauvrir", "allonger", "raccourcir", "élargir", "rétrécir", "approfondir",
+            "survoler", "atterrir", "décoller", "atterrir", "envoler", "s'envoler", "redescendre",
+            "remonter", "redescendre", "remonter", "redescendre", "s'élever", "s'abaisser",
+            "s'allonger", "se raccourcir", "s'élargir", "se rétrécir", "s'approfondir",
+            "s'affaiblir", "se fortifier", "s'enrichir", "s'appauvrir", "se ramollir",
+            "se durcir", "se rougir", "se pâlir", "se jaunir", "se noircir", "se blanchir",
+            
+            // Groupe 3 (irréguliers)
+            "avoir", "être", "faire", "aller", "venir", "devoir", "pouvoir", "savoir",
+            "vouloir", "falloir", "pleuvoir", "voir", "prendre", "comprendre", "apprendre",
+            "surprendre", "reprendre", "entreprendre", "boire", "croire", "lire", "dire",
+            "écrire", "rire", "sourire", "ouvrir", "couvrir", "découvrir", "recouvrir",
+            "offrir", "souffrir", "cueillir", "accueillir", "recueillir", "vêtir",
+            "sortir", "partir", "dormir", "servir", "sentir", "mentir", "départir",
+            "repartir", "consentir", "ressentir", "repentir", "se repentir", "se servir",
+            "s'endormir", "se départir", "se repentir", "se vêtir", "s'asseoir",
+            "se taire", "se plaindre", "se déplaire", "se rire", "se sourire",
+            "s'écrire", "se lire", "se dire", "se boire", "se croire", "se voir",
+            "s'ouvrir", "se couvrir", "se découvrir", "se recouvrir", "s'offrir",
+            "se souffrir", "se cueillir", "s'accueillir", "se recueillir",
+            "naître", "mourir", "courir", "parcourir", "secourir", "fuir",
+            "s'enfuir", "conclure", "inclure", "exclure", "interrompre",
+            "rompre", "corrompre", "rompre", "résoudre", "absoudre", "dissoudre",
+            "coudre", "moudre", "émoudre", "rendre", "vendre", "pendre",
+            "défendre", "attendre", "entendre", "répondre", "correspondre",
+            "confondre", "fondre", "tondre", "plaire", "taire", "extraire",
+            "soustraire", "distraire", "traire", "contraindre", "plaindre",
+            "éteindre", "teindre", "craindre", "joindre", "rejoindre",
+            "poindre", "oindre", "graaître", "paître", "repaaître", "braire",
+            "clore", "fiche", "affiger", "fugir", "garir", "haïr", "quérir"
+        ];
+
+        // Temps de conjugaison
+        const tenses = {
+            1: [ // Niveau 1
+                "présent", "futur", "imparfait"
+            ],
+            2: [ // Niveau 2
+                "présent", "futur", "imparfait", "passé simple", "plus-que-parfait", "subjonctif"
+            ],
+            3: [ // Niveau 3 - Tous les temps
+                "présent", "imparfait", "futur", "passé simple", "passé composé",
+                "plus-que-parfait", "passé antérieur", "futur antérieur",
+                "subjonctif présent", "subjonctif passé", "subjonctif imparfait", "subjonctif plus-que-parfait",
+                "conditionnel présent", "conditionnel passé",
+                "impératif présent", "impératif passé",
+                "infinitif présent", "infinitif passé",
+                "participe présent", "participe passé",
+                "gérondif présent", "gérondif passé"
+            ]
+        };
+
+        // Pronoms
+        const pronouns = [
+            { text: "je", display: "je" },
+            { text: "tu", display: "tu" },
+            { text: "il", display: "il" },
+            { text: "elle", display: "elle" },
+            { text: "nous", display: "nous" },
+            { text: "vous", display: "vous" },
+            { text: "ils", display: "ils" },
+            { text: "elles", display: "elles" }
         ];
 
         // Variables globales
         let currentLevel = 1;
-        let selectedTimer = 0;
-        let score = 0;
-        let currentQuestion = null;
-        let timerInterval = null;
-        let recognition = null;
+        let currentTimer = 0;
+        let currentScore = 0;
+        let currentVerb = "";
+        let currentTense = "";
+        let currentPronoun = "";
+        let correctAnswer = "";
         let isRecording = false;
-        let playerName = localStorage.getItem('playerName') || '';
+        let recognition = null;
+        let timerInterval = null;
+        let timeRemaining = 0;
 
         // Initialisation
-        document.addEventListener('DOMContentLoaded', function() {
+        window.onload = function() {
+            loadLeaderboard();
             initializeSpeechRecognition();
-            loadScores();
-        });
+        };
 
-        // Fonctions de jeu
+        // Sélection du niveau
         function selectLevel(level) {
             currentLevel = level;
-            document.querySelectorAll('.level-btn').forEach(btn => btn.style.opacity = '0.7');
-            document.querySelectorAll('.level-btn')[level-1].style.opacity = '1';
+            document.querySelectorAll('.btn-level').forEach(btn => {
+                btn.style.background = 'linear-gradient(45deg, #4facfe 0%, #00f2fe 100%)';
+            });
+            event.target.style.background = 'linear-gradient(45deg, #f093fb 0%, #f5576c 100%)';
         }
 
+        // Sélection du timer
         function selectTimer(minutes) {
-            selectedTimer = minutes;
-            document.querySelectorAll('.timer-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            currentTimer = minutes;
+            document.querySelectorAll('.timer-selection .btn').forEach(btn => {
+                btn.style.background = 'linear-gradient(45deg, #4facfe 0%, #00f2fe 100%)';
+            });
+            event.target.style.background = 'linear-gradient(45deg, #f093fb 0%, #f5576c 100%)';
         }
 
-        function startGame() {
-            document.getElementById('homeScreen').style.display = 'none';
-            document.getElementById('gameScreen').style.display = 'block';
-            
-            if (selectedTimer > 0) {
-                startTimer(selectedTimer * 60);
-            }
-            
-            generateQuestion();
-            speakQuestion();
-        }
-
-        function generateQuestion() {
-            const verbe = verbes[Math.floor(Math.random() * verbes.length)];
-            const temps = getRandomTense();
-            const personne = Math.floor(Math.random() * 6);
-            const pronoms = ['je', 'tu', 'il/elle', 'nous', 'vous', 'ils/elles'];
-            
-            currentQuestion = {
-                verbe: verbe,
-                temps: temps,
-                personne: personne,
-                pronom: pronoms[personne],
-                reponse: verbe[temps][personne]
-            };
-
-            displayQuestion();
-        }
-
-        function getRandomTense() {
-            const tensesByLevel = {
-                1: ['present', 'futur', 'imparfait'],
-                2: ['present', 'futur', 'imparfait', 'passe_simple', 'plus_que_parfait', 'subjonctif_present'],
-                3: ['present', 'futur', 'imparfait', 'passe_simple', 'plus_que_parfait', 'subjonctif_present', 
-                    'subjonctif_passe', 'conditionnel', 'passe_compose', 'imperatif']
-            };
-            
-            const availableTenses = tensesByLevel[currentLevel];
-            return availableTenses[Math.floor(Math.random() * availableTenses.length)];
-        }
-
-        function displayQuestion() {
-            const questionText = `Conjugue le verbe <span class="verb-word">${currentQuestion.verbe.infinitif}</span> 
-                                 <span class="tense-word">${getTenseName(currentQuestion.temps)}</span> 
-                                 à la <span class="pronoun-word">${getPronounName(currentQuestion.personne)}</span> (${currentQuestion.pronom})`;
-            
-            document.getElementById('questionText').innerHTML = questionText;
-            document.getElementById('answerInput').value = '';
-            document.getElementById('feedbackMessage').innerHTML = '';
-            document.getElementById('conjugationTable').style.display = 'none';
-        }
-
-        function getTenseName(tense) {
-            const tenseNames = {
-                'present': 'au présent',
-                'imparfait': 'à l\'imparfait',
-                'futur': 'au futur',
-                'passe_simple': 'au passé simple',
-                'plus_que_parfait': 'au plus-que-parfait',
-                'passe_compose': 'au passé composé',
-                'subjonctif_present': 'au subjonctif présent',
-                'subjonctif_passe': 'au subjonctif passé',
-                'conditionnel': 'au conditionnel',
-                'imperatif': 'à l\'impératif'
-            };
-            return tenseNames[tense] || tense;
-        }
-
-        function getPronounName(person) {
-            const pronounNames = [
-                'première personne du singulier',
-                'deuxième personne du singulier',
-                'troisième personne du singulier',
-                'première personne du pluriel',
-                'deuxième personne du pluriel',
-                'troisième personne du pluriel'
-            ];
-            return pronounNames[person];
-        }
-
-        function checkAnswer() {
-            const userAnswer = document.getElementById('answerInput').value.trim().toLowerCase();
-            const correctAnswer = currentQuestion.reponse.toLowerCase();
-            
-            if (userAnswer === correctAnswer) {
-                handleCorrectAnswer();
-            } else {
-                handleIncorrectAnswer();
-            }
-        }
-
-        function handleCorrectAnswer() {
-            score += 5;
-            document.getElementById('score').textContent = score;
-            
-            const messages = ['Bravo !', 'C\'est super !', 'Formidable !', 'C\'est génial !'];
-            const message = messages[Math.floor(Math.random() * messages.length)];
-            
-            showFeedback(message, 'success');
-            speak(message);
-            
-            setTimeout(() => {
-                generateQuestion();
-                speakQuestion();
-            }, 2000);
-        }
-
-        function handleIncorrectAnswer() {
-            score -= 5;
-            document.getElementById('score').textContent = score;
-            
-            speak('Erreur');
-            
-            const messages = ['Tu peux le faire !', 'Allez, continue !', 'Réfléchis bien !'];
-            const message = messages[Math.floor(Math.random() * messages.length)];
-            
-            showFeedback(message, 'error');
-            document.getElementById('answerInput').value = '';
-            
-            setTimeout(() => {
-                document.getElementById('feedbackMessage').innerHTML = '';
-            }, 3000);
-        }
-
-        function showFeedback(message, type) {
-            const feedbackElement = document.getElementById('feedbackMessage');
-            feedbackElement.textContent = message;
-            feedbackElement.className = `feedback-message ${type}`;
-        }
-
-        function showAnswer() {
-            if (currentQuestion) {
-                const answer = `${currentQuestion.pronom} ${currentQuestion.reponse}`;
-                document.getElementById('answerInput').value = answer;
-                speak(answer);
-            }
-        }
-
-        function showConjugationTable() {
-            if (currentQuestion) {
-                const table = document.getElementById('conjugationTable');
-                const grid = document.getElementById('conjugationGrid');
-                
-                grid.innerHTML = '';
-                
-                const tenses = ['present', 'imparfait', 'futur', 'passe_simple', 'plus_que_parfait', 
-                              'subjonctif_present', 'conditionnel', 'passe_compose'];
-                
-                tenses.forEach(tense => {
-                    if (currentQuestion.verbe[tense]) {
-                        const group = document.createElement('div');
-                        group.className = 'tense-group';
-                        
-                        const title = document.createElement('div');
-                        title.className = 'tense-name';
-                        title.textContent = getTenseName(tense);
-                        group.appendChild(title);
-                        
-                        const pronouns = ['je', 'tu', 'il/elle', 'nous', 'vous', 'ils/elles'];
-                        currentQuestion.verbe[tense].forEach((form, index) => {
-                            const item = document.createElement('div');
-                            item.className = 'conjugation-item';
-                            item.innerHTML = `<strong>${pronouns[index]}:</strong> ${form}`;
-                            group.appendChild(item);
-                        });
-                        
-                        grid.appendChild(group);
-                    }
-                });
-                
-                table.style.display = 'block';
-            }
-        }
-
-        function restartGame() {
-            score = 0;
-            document.getElementById('score').textContent = score;
-            generateQuestion();
-            speakQuestion();
-        }
-
-        function startTimer(seconds) {
-            let timeLeft = seconds;
-            
-            timerInterval = setInterval(() => {
-                const minutes = Math.floor(timeLeft / 60);
-                const seconds = timeLeft % 60;
-                
-                document.getElementById('timer').textContent = 
-                    `${minutes}:${seconds.toString().padStart(2, '0')}`;
-                
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    endGame();
-                }
-                
-                timeLeft--;
-            }, 1000);
-        }
-
-        function endGame() {
-            speak('Le temps est écoulé !');
-            showScoreTable();
-        }
-
-        // Reconnaissance vocale
+        // Initialisation de la reconnaissance vocale
         function initializeSpeechRecognition() {
             if ('webkitSpeechRecognition' in window) {
                 recognition = new webkitSpeechRecognition();
-                recognition.lang = 'fr-FR';
                 recognition.continuous = false;
                 recognition.interimResults = false;
+                recognition.lang = 'fr-FR';
                 
                 recognition.onresult = function(event) {
-                    const transcript = event.results[0][0].transcript.trim();
+                    const transcript = event.results[0][0].transcript.toLowerCase().trim();
                     document.getElementById('answerInput').value = transcript;
-                    checkAnswer();
+                    checkAnswer(transcript);
                 };
                 
                 recognition.onerror = function(event) {
-                    console.error('Erreur de reconnaissance vocale:', event.error);
+                    console.error('Erreur de reconnaissance:', event.error);
                     stopRecording();
                 };
                 
@@ -787,9 +527,10 @@
             }
         }
 
-        function toggleMicrophone() {
+        // Toggle enregistrement
+        function toggleRecording() {
             if (!recognition) {
-                alert('La reconnaissance vocale n\'est pas supportée par votre navigateur.');
+                alert('La reconnaissance vocale n\'est pas supportée par votre navigateur');
                 return;
             }
             
@@ -797,21 +538,257 @@
                 recognition.stop();
             } else {
                 recognition.start();
-                startRecording();
+                isRecording = true;
+                document.getElementById('microphone').classList.add('recording');
             }
         }
 
-        function startRecording() {
-            isRecording = true;
-            document.getElementById('microphoneBtn').classList.add('recording');
-        }
-
+        // Arrêter l'enregistrement
         function stopRecording() {
             isRecording = false;
-            document.getElementById('microphoneBtn').classList.remove('recording');
+            document.getElementById('microphone').classList.remove('recording');
         }
 
-        // Synthèse vocale
+        // Commencer le jeu
+        function startGame() {
+            const playerName = document.getElementById('playerName').value.trim();
+            if (!playerName) {
+                alert('Veuillez entrer votre nom');
+                return;
+            }
+            
+            localStorage.setItem('playerName', playerName);
+            document.getElementById('mainMenu').classList.remove('active');
+            document.getElementById('gameArea').classList.add('active');
+            
+            if (currentTimer > 0) {
+                timeRemaining = currentTimer * 60;
+                startTimer();
+            }
+            
+            generateQuestion();
+        }
+
+        // Timer
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            document.getElementById('timerDisplay').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Générer une question
+        function generateQuestion() {
+            currentVerb = verbs[Math.floor(Math.random() * verbs.length)];
+            currentTense = tenses[currentLevel][Math.floor(Math.random() * tenses[currentLevel].length)];
+            currentPronoun = pronouns[Math.floor(Math.random() * pronouns.length)];
+            
+            correctAnswer = conjugateVerb(currentVerb, currentTense, currentPronoun.text);
+            
+            const questionText = `Conjugue le verbe <span class="verb">${currentVerb}</span> 
+                                 <span class="tense">au ${currentTense}</span> 
+                                 <span class="pronoun">à la ${getPronounDescription(currentPronoun.text)}</span>`;
+            
+            document.getElementById('question').innerHTML = questionText;
+            document.getElementById('answerInput').value = '';
+            document.getElementById('message').style.display = 'none';
+            document.getElementById('conjugationTable').classList.remove('active');
+            
+            // Énoncer la question
+            speakQuestion();
+        }
+
+        // Obtenir la description du pronom
+        function getPronounDescription(pronoun) {
+            const descriptions = {
+                "je": "première personne du singulier (je)",
+                "tu": "deuxième personne du singulier (tu)",
+                "il": "troisième personne du singulier (il)",
+                "elle": "troisième personne du singulier (elle)",
+                "nous": "première personne du pluriel (nous)",
+                "vous": "deuxième personne du pluriel (vous)",
+                "ils": "troisième personne du pluriel (ils)",
+                "elles": "troisième personne du pluriel (elles)"
+            };
+            return descriptions[pronoun];
+        }
+
+        // Conjugaison des verbes
+        function conjugateVerb(verb, tense, pronoun) {
+            // Simplification de la conjugaison - en réalité, cela nécessiterait une base de données complète
+            // Pour cette démo, nous utilisons des règles de base
+            
+            // Exceptions courantes
+            const exceptions = {
+                "avoir": {
+                    "présent": { "je": "j'ai", "tu": "as", "il": "a", "nous": "avons", "vous": "avez", "ils": "ont" },
+                    "imparfait": { "je": "j'avais", "tu": "avais", "il": "avait", "nous": "avions", "vous": "aviez", "ils": "avaient" },
+                    "futur": { "je": "aurai", "tu": "auras", "il": "aura", "nous": "aurons", "vous": "aurez", "ils": "auront" }
+                },
+                "être": {
+                    "présent": { "je": "suis", "tu": "es", "il": "est", "nous": "sommes", "vous": "êtes", "ils": "sont" },
+                    "imparfait": { "je": "étais", "tu": "étais", "il": "était", "nous": "étions", "vous": "étiez", "ils": "étaient" },
+                    "futur": { "je": "serai", "tu": "seras", "il": "sera", "nous": "serons", "vous": "serez", "ils": "seront" }
+                },
+                "faire": {
+                    "présent": { "je": "fais", "tu": "fais", "il": "fait", "nous": "faisons", "vous": "faites", "ils": "font" },
+                    "imparfait": { "je": "faisais", "tu": "faisais", "il": "faisait", "nous": "faisions", "vous": "faisiez", "ils": "faisaient" },
+                    "futur": { "je": "ferai", "tu": "feras", "il": "fera", "nous": "ferons", "vous": "ferez", "ils": "feront" }
+                },
+                "aller": {
+                    "présent": { "je": "vais", "tu": "vas", "il": "va", "nous": "allons", "vous": "allez", "ils": "vont" },
+                    "imparfait": { "je": "allais", "tu": "allais", "il": "allait", "nous": "allions", "vous": "alliez", "ils": "allaient" },
+                    "futur": { "je": "irai", "tu": "iras", "il": "ira", "nous": "irons", "vous": "irez", "ils": "iront" }
+                },
+                "venir": {
+                    "présent": { "je": "viens", "tu": "viens", "il": "vient", "nous": "venons", "vous": "venez", "ils": "viennent" },
+                    "imparfait": { "je": "venais", "tu": "venais", "il": "venait", "nous": "venions", "vous": "veniez", "ils": "venaient" },
+                    "futur": { "je": "viendrai", "tu": "viendras", "il": "viendra", "nous": "viendrons", "vous": "viendrez", "ils": "viendront" }
+                }
+            };
+            
+            // Vérifier les exceptions
+            if (exceptions[verb] && exceptions[verb][tense]) {
+                return exceptions[verb][tense][pronoun] || verb;
+            }
+            
+            // Conjugaison de base pour les verbes réguliers
+            let stem = verb.slice(0, -2);
+            let ending = verb.slice(-2);
+            
+            if (tense === "présent") {
+                if (ending === "er") {
+                    const endings = { "je": "e", "tu": "es", "il": "e", "nous": "ons", "vous": "ez", "ils": "ent" };
+                    let conjugated = stem + endings[pronoun];
+                    // Gérer l'élision
+                    if (pronoun === "je" && /^[aeiou]/.test(conjugated)) {
+                        conjugated = "j'" + conjugated;
+                    }
+                    return conjugated;
+                } else if (ending === "ir") {
+                    const endings = { "je": "is", "tu": "is", "il": "it", "nous": "issons", "vous": "issez", "ils": "issent" };
+                    return stem + endings[pronoun];
+                }
+            } else if (tense === "imparfait") {
+                // Pour l'imparfait, utiliser la base de la première personne du pluriel
+                let base = stem + "ons"; // simplification
+                const endings = { "je": "ais", "tu": "ais", "il": "ait", "nous": "ions", "vous": "iez", "ils": "aient" };
+                let conjugated = base.slice(0, -3) + endings[pronoun];
+                if (pronoun === "je" && /^[aeiou]/.test(conjugated)) {
+                    conjugated = "j'" + conjugated;
+                }
+                return conjugated;
+            } else if (tense === "futur") {
+                const endings = { "je": "ai", "tu": "as", "il": "a", "nous": "ons", "vous": "ez", "ils": "ont" };
+                return verb + endings[pronoun];
+            }
+            
+            return verb; // Par défaut
+        }
+
+        // Vérifier la réponse
+        function checkAnswer(userAnswer) {
+            // Nettoyer la réponse
+            userAnswer = userAnswer.toLowerCase().trim();
+            
+            // Vérifier les formes alternatives
+            const alternatives = [correctAnswer.toLowerCase()];
+            
+            // Gérer les élisions
+            if (correctAnswer.startsWith("j'")) {
+                alternatives.push(correctAnswer.replace("j'", "je "));
+            }
+            
+            // Vérifier la réponse
+            if (alternatives.some(alt => userAnswer === alt)) {
+                // Bonne réponse
+                currentScore += 5;
+                updateScore();
+                showMessage("Bravo ! C'est super !", "success");
+                speak("Bravo !");
+                
+                setTimeout(() => {
+                    generateQuestion();
+                }, 2000);
+            } else {
+                // Mauvaise réponse
+                currentScore -= 5;
+                updateScore();
+                showMessage("Erreur ! Tu peux le faire, réessaie !", "error");
+                speak("Erreur !");
+                document.getElementById('answerInput').value = '';
+            }
+        }
+
+        // Afficher un message
+        function showMessage(text, type) {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.className = `message ${type}`;
+            messageEl.style.display = 'block';
+        }
+
+        // Mettre à jour le score
+        function updateScore() {
+            document.getElementById('scoreValue').textContent = currentScore;
+        }
+
+        // Montrer la réponse
+        function showAnswer() {
+            const answerWithPronoun = `${currentPronoun.display} ${correctAnswer}`;
+            showMessage(`La bonne réponse est : ${answerWithPronoun}`, "success");
+            speak(answerWithPronoun);
+        }
+
+        // Basculer l'affichage de la conjugaison
+        function toggleConjugation() {
+            const table = document.getElementById('conjugationTable');
+            if (table.classList.contains('active')) {
+                table.classList.remove('active');
+            } else {
+                showConjugationTable();
+            }
+        }
+
+        // Afficher le tableau de conjugaison
+        function showConjugationTable() {
+            const table = document.getElementById('conjugationTable');
+            let html = `<h3>Conjugaison de ${currentVerb}</h3>`;
+            
+            // Pour la démo, afficher quelques temps principaux
+            const mainTenses = ["présent", "imparfait", "futur"];
+            
+            html += '<table>';
+            html += '<tr><th>Temps</th><th>Je</th><th>Tu</th><th>Il/Elle</th><th>Nous</th><th>Vous</th><th>Ils/Elles</th></tr>';
+            
+            mainTenses.forEach(tense => {
+                html += '<tr>';
+                html += `<td>${tense}</td>`;
+                pronouns.forEach(pronoun => {
+                    const conjugated = conjugateVerb(currentVerb, tense, pronoun.text);
+                    html += `<td>${conjugated}</td>`;
+                });
+                html += '</tr>';
+            });
+            
+            html += '</table>';
+            table.innerHTML = html;
+            table.classList.add('active');
+        }
+
+        // Fonction de synthèse vocale
         function speak(text) {
             if ('speechSynthesis' in window) {
                 const utterance = new SpeechSynthesisUtterance(text);
@@ -822,76 +799,62 @@
             }
         }
 
+        // Énoncer la question
         function speakQuestion() {
-            setTimeout(() => {
-                const questionText = document.getElementById('questionText').textContent;
-                speak(questionText);
-            }, 500);
+            const questionText = `Conjugue le verbe ${currentVerb} au ${currentTense} à la ${getPronounDescription(currentPronoun.text)}`;
+            speak(questionText);
         }
 
-        // Gestion des scores
-        function showScoreTable() {
-            document.getElementById('overlay').style.display = 'block';
-            document.getElementById('scoreTable').style.display = 'block';
-            loadScores();
-        }
-
-        function closeScoreTable() {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('scoreTable').style.display = 'none';
-        }
-
-        function saveScore() {
-            const name = document.getElementById('playerName').value.trim();
-            if (name) {
-                playerName = name;
-                localStorage.setItem('playerName', name);
-                
-                let scores = JSON.parse(localStorage.getItem('conjugationScores') || '[]');
-                scores.push({
-                    name: name,
-                    score: score,
-                    date: new Date().toLocaleDateString('fr-FR'),
-                    level: currentLevel
-                });
-                
-                scores.sort((a, b) => b.score - a.score);
-                scores = scores.slice(0, 10); // Garder les 10 meilleurs
-                
-                localStorage.setItem('conjugationScores', JSON.stringify(scores));
-                loadScores();
-            }
-        }
-
-        function loadScores() {
-            const scores = JSON.parse(localStorage.getItem('conjugationScores') || '[]');
-            const scoreList = document.getElementById('scoreList');
+        // Charger le tableau des scores
+        function loadLeaderboard() {
+            const leaderboard = JSON.parse(localStorage.getItem('leaderboard') || '[]');
+            const entries = document.getElementById('leaderboardEntries');
             
-            scoreList.innerHTML = '';
-            scores.forEach((score, index) => {
-                const item = document.createElement('div');
-                item.className = 'score-item';
-                item.innerHTML = `
-                    <span>${index + 1}. ${score.name}</span>
-                    <span>${score.score} pts (Niv. ${score.level})</span>
-                `;
-                scoreList.appendChild(item);
+            entries.innerHTML = '';
+            leaderboard.sort((a, b) => b.score - a.score).slice(0, 5).forEach(entry => {
+                const div = document.createElement('div');
+                div.className = 'leaderboard-entry';
+                div.innerHTML = `<span>${entry.name}</span><span>${entry.score} pts</span>`;
+                entries.appendChild(div);
+            });
+        }
+
+        // Sauvegarder le score
+        function saveScore() {
+            const playerName = localStorage.getItem('playerName');
+            if (!playerName) return;
+            
+            const leaderboard = JSON.parse(localStorage.getItem('leaderboard') || '[]');
+            leaderboard.push({
+                name: playerName,
+                score: currentScore,
+                date: new Date().toISOString()
             });
             
-            if (playerName) {
-                document.getElementById('playerName').value = playerName;
-            }
+            localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
         }
 
-        // Écouteurs d'événements
+        // Fin du jeu
+        function endGame() {
+            saveScore();
+            alert(`Jeu terminé ! Votre score : ${currentScore} points`);
+            location.reload();
+        }
+
+        // Gestion de la saisie
         document.getElementById('answerInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-                checkAnswer();
+                checkAnswer(this.value);
             }
         });
 
-        // Fermer le tableau des scores en cliquant sur l'overlay
-        document.getElementById('overlay').addEventListener('click', closeScoreTable);
+        // Empêcher la fermeture accidentelle
+        window.addEventListener('beforeunload', function(e) {
+            if (currentScore > 0) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
     </script>
 </body>
 </html>
