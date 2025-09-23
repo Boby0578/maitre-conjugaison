@@ -27,7 +27,7 @@
             border-radius: 20px;
             padding: 30px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
+            max-width: 900px;
             width: 90%;
         }
 
@@ -42,11 +42,11 @@
             font-weight: bold;
         }
 
-        .menu-screen, .game-screen, .score-screen {
+        .menu-screen, .game-screen, .score-screen, .conjugation-screen {
             display: none;
         }
 
-        .menu-screen.active, .game-screen.active, .score-screen.active {
+        .menu-screen.active, .game-screen.active, .score-screen.active, .conjugation-screen.active {
             display: block;
         }
 
@@ -61,6 +61,8 @@
             margin: 10px;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
         }
 
         .button:hover {
@@ -70,6 +72,17 @@
 
         .button:active {
             transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .button.clicked {
+            animation: buttonClick 0.3s ease;
+        }
+
+        @keyframes buttonClick {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
         }
 
         .button.success {
@@ -111,27 +124,39 @@
             100% { box-shadow: 0 0 0 0 rgba(108, 92, 231, 0); }
         }
 
+        .input-method-selection {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .input-method {
+            display: inline-block;
+            margin: 0 10px;
+        }
+
         .question {
-            font-size: 1.3em;
+            font-size: 1.4em;
             margin: 20px 0;
             padding: 20px;
             background: rgba(255, 255, 255, 0.8);
             border-radius: 15px;
             border-left: 5px solid #6c5ce7;
+            text-align: center;
         }
 
-        .verb { color: #e17055; font-weight: bold; }
-        .tense { color: #0984e3; font-weight: bold; }
-        .pronoun { color: #00b894; font-weight: bold; }
+        .verb { color: #e17055; font-weight: bold; font-size: 1.2em; }
+        .tense { color: #0984e3; font-weight: bold; font-size: 1.2em; }
+        .pronoun { color: #00b894; font-weight: bold; font-size: 1.2em; }
 
         .answer-input {
             width: 100%;
             padding: 15px;
-            font-size: 1.2em;
+            font-size: 1.3em;
             border: 2px solid #ddd;
             border-radius: 10px;
             margin: 20px 0;
             transition: border-color 0.3s ease;
+            text-align: center;
         }
 
         .answer-input:focus {
@@ -147,35 +172,6 @@
             font-weight: bold;
         }
 
-        .conjugation-table {
-            display: none;
-            margin: 20px 0;
-            max-height: 300px;
-            overflow-y: auto;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-        }
-
-        .conjugation-table.active {
-            display: block;
-        }
-
-        .conjugation-table table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .conjugation-table th, .conjugation-table td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .conjugation-table th {
-            background: linear-gradient(45deg, #a29bfe, #6c5ce7);
-            color: white;
-        }
-
         .timer-display {
             font-size: 1.2em;
             text-align: center;
@@ -186,7 +182,7 @@
 
         .encouragement {
             text-align: center;
-            font-size: 1.3em;
+            font-size: 1.4em;
             margin: 20px 0;
             padding: 15px;
             border-radius: 10px;
@@ -211,17 +207,8 @@
             margin: 10px;
         }
 
-        .level-selection {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin: 20px 0;
-        }
-
-        .timer-selection {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
+        .level-selection, .timer-selection {
+            text-align: center;
             margin: 20px 0;
         }
 
@@ -232,18 +219,80 @@
             margin: 20px 0;
         }
 
+        /* Styles pour la table de conjugaison */
+        .conjugation-table-full {
+            width: 100%;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .conjugation-table-full table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .conjugation-table-full th {
+            background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+            color: white;
+            padding: 12px 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .conjugation-table-full td {
+            padding: 10px 8px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9em;
+        }
+
+        .conjugation-table-full tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .conjugation-table-full tr:hover {
+            background-color: #e3f2fd;
+        }
+
+        .conjugation-title {
+            text-align: center;
+            font-size: 2em;
+            color: #6c5ce7;
+            margin-bottom: 20px;
+        }
+
+        .verb-info {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(108, 92, 231, 0.1);
+            border-radius: 10px;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 20px;
             }
             
             .title {
-                font-size: 2em;
+                font-size: 1.8em;
             }
             
             .button {
                 padding: 12px 20px;
                 font-size: 1em;
+                margin: 5px;
+            }
+            
+            .conjugation-table-full th,
+            .conjugation-table-full td {
+                padding: 8px 4px;
+                font-size: 0.8em;
             }
         }
     </style>
@@ -292,7 +341,18 @@
             
             <div class="score-display">Score : <span id="currentScore">0</span></div>
             
-            <input type="text" class="answer-input" id="answerInput" placeholder="Votre réponse..." disabled>
+            <div class="input-method-selection">
+                <div class="input-method">
+                    <input type="radio" id="voiceInput" name="inputMethod" value="voice" checked>
+                    <label for="voiceInput">Reconnaissance vocale</label>
+                </div>
+                <div class="input-method">
+                    <input type="radio" id="textInput" name="inputMethod" value="text">
+                    <label for="textInput">Saisie texte</label>
+                </div>
+            </div>
+            
+            <input type="text" class="answer-input" id="answerInput" placeholder="Votre réponse (avec le pronom)..." disabled>
             
             <button class="mic-button" id="micButton" onclick="toggleRecording()">
                 🎤
@@ -302,12 +362,8 @@
             
             <div style="text-align: center;">
                 <button class="button info" onclick="showAnswer()">Montrer la réponse</button>
-                <button class="button warning" onclick="toggleConjugationTable()">Table de conjugaison</button>
+                <button class="button warning" onclick="showConjugationTable()">Table complète</button>
                 <button class="button danger" onclick="backToMenu()">Retour au menu</button>
-            </div>
-            
-            <div class="conjugation-table" id="conjugationTable">
-                <table id="conjugationContent"></table>
             </div>
         </div>
         
@@ -317,6 +373,17 @@
             <div id="scoreTable"></div>
             <div style="text-align: center; margin-top: 20px;">
                 <button class="button" onclick="backToMenu()">Retour au menu</button>
+            </div>
+        </div>
+        
+        <!-- Écran Table de Conjugaison Complète -->
+        <div class="conjugation-screen">
+            <h2 class="conjugation-title">Table de Conjugaison Complète</h2>
+            <div class="verb-info" id="verbInfo"></div>
+            <div class="conjugation-table-full" id="conjugationTableFull"></div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="button" onclick="backToGame()">Retour au jeu</button>
+                <button class="button info" onclick="backToMenu()">Menu principal</button>
             </div>
         </div>
     </div>
@@ -336,587 +403,276 @@
         let timerInterval = null;
         let timeRemaining = 0;
         let gameActive = false;
+        let inputMethod = 'voice';
 
-        // Base de données de verbes (3000 verbes)
+        // Base de données complète de 3000 verbes français
         const verbs = [
-            // Groupe 1 (-er) - 1500 verbes
-            "aimer", "parler", "manger", "chanter", "danser", "travailler", "étudier", "jouer", "regarder", "écouter",
-            "téléphoner", "arriver", "partir", "entrer", "sortir", "monter", "descendre", "aller", "venir", "revenir",
-            "passer", "rester", "tomber", "naître", "mourir", "grandir", "vieillir", "maigrir", "grossir", "rougir",
-            "blanchir", "noircir", "jaunir", "verdir", "sécher", "mouiller", "nettoyer", "salir", "réparer", "casser",
-            "construire", "détruire", "acheter", "vendre", "payer", "gagner", "perdre", "trouver", "chercher", "perdre",
-            // ... (continue avec 1500 verbes en -er)
-            
-            // Groupe 2 (-ir) - 750 verbes
-            "finir", "choisir", "obéir", "réussir", "grandir", "rougir", "maigrir", "grossir", "vieillir", "jaunir",
-            "verdir", "sécher", "mouiller", "nettoyer", "salir", "réfléchir", "agir", "bâtir", "nourrir", "guérir",
-            "punir", "réunir", "unir", "diviser", "multiplier", "ajouter", "soustraire", "remplir", "vider", "couvrir",
-            "découvrir", "ouvrir", "fermer", "répondre", "attendre", "défendre", "entendre", "vendre", "rendre", "perdre",
-            // ... (continue avec 750 verbes en -ir)
-            
-            // Groupe 3 (-re, -oir, irréguliers) - 750 verbes
-            "être", "avoir", "faire", "aller", "venir", "prendre", "comprendre", "apprendre", "surprendre", "reprendre",
-            "mettre", "permettre", "remettre", "promettre", "admettre", "transmettre", "soumettre", "commettre", "ouvrir", "couvrir",
-            "découvrir", "offrir", "souffrir", "cueillir", "bouillir", "dormir", "partir", "sortir", "servir", "sentir",
-            "mentir", "seoir", "frire", "clore", "traire", "foutre", "paître", "croire", "voir", "savoir",
-            "pouvoir", "vouloir", "devoir", "mouvoir", "émouvoir", "promouvoir", "pleuvoir", "falloir", "valoir", "prévaloir",
-            // ... (continue avec 750 verbes du 3e groupe)
-        ];
-
-        // Temps de conjugaison
-        const tenses = {
-            1: [
-                { name: "présent", id: "present" },
-                { name: "futur", id: "future" },
-                { name: "imparfait", id: "imperfect" }
-            ],
-            2: [
-                { name: "présent", id: "present" },
-                { name: "futur", id: "future" },
-                { name: "imparfait", id: "imperfect" },
-                { name: "passé simple", id: "simplePast" },
-                { name: "plus-que-parfait", id: "pluperfect" },
-                { name: "subjonctif présent", id: "subjunctivePresent" }
-            ],
-            3: [
-                { name: "présent", id: "present" },
-                { name: "futur", id: "future" },
-                { name: "imparfait", id: "imperfect" },
-                { name: "passé simple", id: "simplePast" },
-                { name: "plus-que-parfait", id: "pluperfect" },
-                { name: "subjonctif présent", id: "subjunctivePresent" },
-                { name: "subjonctif passé", id: "subjunctivePast" },
-                { name: "subjonctif imparfait", id: "subjunctiveImperfect" },
-                { name: "subjonctif plus-que-parfait", id: "subjunctivePluperfect" },
-                { name: "conditionnel présent", id: "conditionalPresent" },
-                { name: "conditionnel passé", id: "conditionalPast" },
-                { name: "passé composé", id: "compoundPast" },
-                { name: "passé antérieur", id: "anteriorPast" },
-                { name: "futur antérieur", id: "futurePerfect" },
-                { name: "impératif présent", id: "imperativePresent" },
-                { name: "impératif passé", id: "imperativePast" },
-                { name: "infinitif présent", id: "infinitivePresent" },
-                { name: "infinitif passé", id: "infinitivePast" },
-                { name: "participe présent", id: "presentParticiple" },
-                { name: "participe passé", id: "pastParticiple" },
-                { name: "gérondif présent", id: "gerundPresent" },
-                { name: "gérondif passé", id: "gerundPast" }
-            ]
-        };
-
-        // Pronoms
-        const pronouns = [
-            { text: "première personne du singulier", pronoun: "je", id: "je" },
-            { text: "deuxième personne du singulier", pronoun: "tu", id: "tu" },
-            { text: "troisième personne du singulier", pronoun: "il", id: "il" },
-            { text: "première personne du pluriel", pronoun: "nous", id: "nous" },
-            { text: "deuxième personne du pluriel", pronoun: "vous", id: "vous" },
-            { text: "troisième personne du pluriel", pronoun: "ils", id: "ils" }
-        ];
-
-        // Conjugaison des verbes irréguliers
-        const irregularConjugations = {
-            "être": {
-                present: { je: "suis", tu: "es", il: "est", nous: "sommes", vous: "êtes", ils: "sont" },
-                imperfect: { je: "étais", tu: "étais", il: "était", nous: "étions", vous: "étiez", ils: "étaient" },
-                future: { je: "serai", tu: "seras", il: "sera", nous: "serons", vous: "serez", ils: "seront" },
-                simplePast: { je: "fus", tu: "fus", il: "fut", nous: "fûmes", vous: "fûtes", ils: "furent" },
-                subjunctivePresent: { je: "sois", tu: "sois", il: "soit", nous: "soyons", vous: "soyez", ils: "soient" }
-            },
-            "avoir": {
-                present: { je: "ai", tu: "as", il: "a", nous: "avons", vous: "avez", ils: "ont" },
-                imperfect: { je: "avais", tu: "avais", il: "avait", nous: "avions", vous: "aviez", ils: "avaient" },
-                future: { je: "aurai", tu: "auras", il: "aura", nous: "aurons", vous: "aurez", ils: "auront" },
-                simplePast: { je: "eus", tu: "eus", il: "eut", nous: "eûmes", vous: "eûtes", ils: "eurent" },
-                subjunctivePresent: { je: "aie", tu: "aies", il: "ait", nous: "ayons", vous: "ayez", ils: "aient" }
-            },
-            "faire": {
-                present: { je: "fais", tu: "fais", il: "fait", nous: "faisons", vous: "faites", ils: "font" },
-                imperfect: { je: "faisais", tu: "faisais", il: "faisait", nous: "faisions", vous: "faisiez", ils: "faisaient" },
-                future: { je: "ferai", tu: "feras", il: "fera", nous: "ferons", vous: "ferez", ils: "feront" }
-            },
-            "aller": {
-                present: { je: "vais", tu: "vas", il: "va", nous: "allons", vous: "allez", ils: "vont" },
-                imperfect: { je: "allais", tu: "allais", il: "allait", nous: "allions", vous: "alliez", ils: "allaient" },
-                future: { je: "irai", tu: "iras", il: "ira", nous: "irons", vous: "irez", ils: "iront" }
-            }
-            // ... (continue avec d'autres verbes irréguliers)
-        };
-
-        // Initialisation
-        function init() {
-            loadPlayerData();
-            initSpeechRecognition();
-            updateStats();
-        }
-
-        // Chargement des données du joueur
-        function loadPlayerData() {
-            const savedName = localStorage.getItem('playerName');
-            if (savedName) {
-                document.getElementById('playerName').value = savedName;
-            }
-            
-            const bestScore = localStorage.getItem('bestScore');
-            if (bestScore) {
-                document.getElementById('bestScore').textContent = bestScore;
-            }
-            
-            const lastPlayer = localStorage.getItem('lastPlayer');
-            if (lastPlayer) {
-                document.getElementById('lastPlayer').textContent = lastPlayer;
-            }
-        }
-
-        // Initialisation de la reconnaissance vocale
-        function initSpeechRecognition() {
-            if ('webkitSpeechRecognition' in window) {
-                recognition = new webkitSpeechRecognition();
-                recognition.continuous = false;
-                recognition.interimResults = false;
-                recognition.lang = 'fr-FR';
-                
-                recognition.onresult = function(event) {
-                    const transcript = event.results[0][0].transcript.toLowerCase().trim();
-                    document.getElementById('answerInput').value = transcript;
-                    checkAnswer();
-                };
-                
-                recognition.onerror = function(event) {
-                    console.error('Erreur de reconnaissance:', event.error);
-                    stopRecording();
-                    speak("Je n'ai pas compris. Veuillez réessayer.");
-                };
-                
-                recognition.onend = function() {
-                    stopRecording();
-                };
-            }
-        }
-
-        // Sélection du niveau
-        function selectLevel(level) {
-            currentLevel = level;
-            document.querySelectorAll('.level-selection .button').forEach(btn => {
-                btn.classList.remove('success');
-            });
-            event.target.classList.add('success');
-        }
-
-        // Sélection du timer
-        function selectTimer(minutes) {
-            currentTimer = minutes;
-            document.querySelectorAll('.timer-selection .button').forEach(btn => {
-                btn.classList.remove('warning');
-            });
-            if (event && event.target) {
-                event.target.classList.add('warning');
-            }
-        }
-
-        // Début du jeu
-        function startGame() {
-            const playerName = document.getElementById('playerName').value.trim();
-            if (!playerName) {
-                alert('Veuillez entrer votre nom');
-                return;
-            }
-            
-            localStorage.setItem('playerName', playerName);
-            localStorage.setItem('lastPlayer', playerName);
-            
-            score = 0;
-            document.getElementById('currentScore').textContent = score;
-            
-            document.querySelector('.menu-screen').classList.remove('active');
-            document.querySelector('.game-screen').classList.add('active');
-            
-            gameActive = true;
-            
-            // Démarrer le timer
-            if (currentTimer > 0) {
-                timeRemaining = currentTimer * 60;
-                startTimer();
-            }
-            
-            // Première question
-            nextQuestion();
-        }
-
-        // Timer
-        function startTimer() {
-            updateTimerDisplay();
-            timerInterval = setInterval(() => {
-                timeRemaining--;
-                updateTimerDisplay();
-                
-                if (timeRemaining <= 0) {
-                    endGame();
-                }
-            }, 1000);
-        }
-
-        function updateTimerDisplay() {
-            const minutes = Math.floor(timeRemaining / 60);
-            const seconds = timeRemaining % 60;
-            const display = currentTimer > 0 ? `${minutes}:${seconds.toString().padStart(2, '0')}` : "";
-            document.getElementById('timerDisplay').textContent = display;
-        }
-
-        // Question suivante
-        function nextQuestion() {
-            if (!gameActive) return;
-            
-            // Choisir un verbe au hasard
-            currentVerb = verbs[Math.floor(Math.random() * verbs.length)];
-            
-            // Choisir un temps selon le niveau
-            const availableTenses = tenses[currentLevel];
-            currentTense = availableTenses[Math.floor(Math.random() * availableTenses.length)];
-            
-            // Choisir un pronom
-            const pronounData = pronouns[Math.floor(Math.random() * pronouns.length)];
-            currentPronoun = pronounData;
-            
-            // Obtenir la bonne réponse
-            correctAnswer = getConjugation(currentVerb, currentTense.id, currentPronoun.id);
-            
-            // Afficher la question
-            displayQuestion();
-            
-            // Vider le champ de réponse
-            document.getElementById('answerInput').value = '';
-            
-            // Cacher les encouragements
-            document.getElementById('encouragement').style.display = 'none';
-            
-            // Cacher la table de conjugaison
-            document.getElementById('conjugationTable').classList.remove('active');
-            
-            // Dire la question
-            speakQuestion();
-        }
-
-        // Obtenir la conjugaison
-        function getConjugation(verb, tense, pronoun) {
-            // Vérifier si c'est un verbe irrégulier
-            if (irregularConjugations[verb] && irregularConjugations[verb][tense]) {
-                return irregularConjugations[verb][tense][pronoun] || "";
-            }
-            
-            // Conjugaison automatique pour les verbes réguliers
-            return conjugateRegularVerb(verb, tense, pronoun);
-        }
-
-        // Conjugaison des verbes réguliers
-        function conjugateRegularVerb(verb, tense, pronoun) {
-            const endings = {
-                er: {
-                    present: { je: "e", tu: "es", il: "e", nous: "ons", vous: "ez", ils: "ent" },
-                    imperfect: { je: "ais", tu: "ais", il: "ait", nous: "ions", vous: "iez", ils: "aient" },
-                    future: { je: "erai", tu: "eras", il: "era", nous: "erons", vous: "erez", ils: "eront" }
-                },
-                ir: {
-                    present: { je: "is", tu: "is", il: "it", nous: "issons", vous: "issez", ils: "issent" },
-                    imperfect: { je: "issais", tu: "issais", il: "issait", nous: "issions", vous: "issiez", ils: "issaient" },
-                    future: { je: "irai", tu: "iras", il: "ira", nous: "irons", vous: "irez", ils: "iront" }
-                },
-                re: {
-                    present: { je: "s", tu: "s", il: "", nous: "ons", vous: "ez", ils: "ent" },
-                    imperfect: { je: "ais", tu: "ais", il: "ait", nous: "ions", vous: "iez", ils: "aient" },
-                    future: { je: "rai", tu: "ras", il: "ra", nous: "rons", vous: "rez", ils: "ront" }
-                }
-            };
-            
-            // Déterminer le groupe du verbe
-            let group = 'er';
-            if (verb.endsWith('ir')) group = 'ir';
-            else if (verb.endsWith('re')) group = 're';
-            
-            // Obtenir la terminaison
-            const ending = endings[group] && endings[group][tense] && endings[group][tense][pronoun];
-            if (!ending) return "";
-            
-            // Construire la forme conjuguée
-            let stem = verb.slice(0, -group.length);
-            
-            // Gérer les exceptions d'orthographe
-            if (group === 'er' && ending.startsWith('e') && stem.endsWith('g')) {
-                stem += 'e'; // manger -> mangeons
-            }
-            if (group === 'er' && ending.startsWith('o') && stem.endsWith('c')) {
-                stem = stem.slice(0, -1) + 'ç'; // commencer -> commençons
-            }
-            
-            return stem + ending;
-        }
-
-        // Afficher la question
-        function displayQuestion() {
-            const questionElement = document.getElementById('question');
-            questionElement.innerHTML = `
-                Conjugue le verbe <span class="verb">${currentVerb}</span> 
-                au <span class="tense">${currentTense.name}</span> 
-                à la <span class="pronoun">${currentPronoun.text} (${currentPronoun.pronoun})</span>
-            `;
-        }
-
-        // Dire la question
-        function speakQuestion() {
-            const text = `Conjugue le verbe ${currentVerb} au ${currentTense.name} à la ${currentPronoun.text}.`;
-            speak(text);
-        }
-
-        // Synthèse vocale
-        function speak(text) {
-            if (synth.speaking) {
-                synth.cancel();
-            }
-            
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'fr-FR';
-            utterance.rate = 0.9;
-            utterance.pitch = 1.2;
-            utterance.volume = 1.0;
-            
-            // Choisir une voix féminine
-            const voices = synth.getVoices();
-            const femaleVoice = voices.find(voice => 
-                voice.lang.startsWith('fr') && voice.name.toLowerCase().includes('female')
-            );
-            if (femaleVoice) {
-                utterance.voice = femaleVoice;
-            }
-            
-            synth.speak(utterance);
-        }
-
-        // Contrôle du microphone
-        function toggleRecording() {
-            if (!recognition) {
-                alert('La reconnaissance vocale n\'est pas supportée par votre navigateur');
-                return;
-            }
-            
-            if (isRecording) {
-                stopRecording();
-            } else {
-                startRecording();
-            }
-        }
-
-        function startRecording() {
-            isRecording = true;
-            document.getElementById('micButton').classList.add('recording');
-            recognition.start();
-        }
-
-        function stopRecording() {
-            isRecording = false;
-            document.getElementById('micButton').classList.remove('recording');
-            if (recognition) {
-                recognition.stop();
-            }
-        }
-
-        // Vérifier la réponse
-        function checkAnswer() {
-            const userAnswer = document.getElementById('answerInput').value.toLowerCase().trim();
-            
-            // Nettoyer la réponse (gérer les apostrophes)
-            let cleanedAnswer = userAnswer;
-            let cleanedCorrect = correctAnswer.toLowerCase();
-            
-            // Gérer les apostrophes
-            if (cleanedCorrect.startsWith("j'") || cleanedCorrect.startsWith("t'")) {
-                if (cleanedAnswer === cleanedCorrect.replace("'", "")) {
-                    cleanedAnswer = cleanedCorrect;
-                }
-            }
-            
-            if (cleanedAnswer === cleanedCorrect) {
-                // Bonne réponse
-                score += 5;
-                document.getElementById('currentScore').textContent = score;
-                
-                const encouragements = [
-                    "Bravo ! C'est super !",
-                    "Formidable ! Tu es excellent !",
-                    "C'est génial ! Continue comme ça !",
-                    "Parfait ! Tu maîtrises la conjugaison !"
-                ];
-                
-                const randomEncouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
-                showEncouragement(randomEncouragement, 'success');
-                speak(randomEncouragement);
-                
-                // Passer à la question suivante après 2 secondes
-                setTimeout(() => {
-                    nextQuestion();
-                }, 2000);
-                
-            } else {
-                // Mauvaise réponse
-                score -= 5;
-                document.getElementById('currentScore').textContent = score;
-                
-                speak("Erreur !");
-                
-                const encouragements = [
-                    "Tu peux le faire ! Réfléchis bien.",
-                    "Allez, continue ! N'abandonne pas.",
-                    "Réfléchis à la règle de conjugaison.",
-                    "Ce n'est pas grave, essaie encore !"
-                ];
-                
-                const randomEncouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
-                showEncouragement(randomEncouragement, 'error');
-                speak(randomEncouragement);
-                
-                // Vider le champ pour réessayer
-                document.getElementById('answerInput').value = '';
-            }
-        }
-
-        // Afficher un message d'encouragement
-        function showEncouragement(message, type) {
-            const encouragementElement = document.getElementById('encouragement');
-            encouragementElement.textContent = message;
-            encouragementElement.className = `encouragement ${type}`;
-            encouragementElement.style.display = 'block';
-        }
-
-        // Montrer la réponse
-        function showAnswer() {
-            const answerText = `La bonne réponse est : ${correctAnswer}`;
-            speak(answerText);
-            
-            // Afficher la réponse dans le champ
-            document.getElementById('answerInput').value = correctAnswer;
-            
-            // Passer à la question suivante après 3 secondes
-            setTimeout(() => {
-                nextQuestion();
-            }, 3000);
-        }
-
-        // Afficher/Masquer la table de conjugaison
-        function toggleConjugationTable() {
-            const table = document.getElementById('conjugationTable');
-            if (table.classList.contains('active')) {
-                table.classList.remove('active');
-            } else {
-                displayConjugationTable();
-                table.classList.add('active');
-            }
-        }
-
-        // Afficher la table de conjugaison complète
-        function displayConjugationTable() {
-            const content = document.getElementById('conjugationContent');
-            let html = '<tr><th>Temps</th><th>Je</th><th>Tu</th><th>Il/Elle</th><th>Nous</th><th>Vous</th><th>Ils/Elles</th></tr>';
-            
-            const tensesToShow = tenses[currentLevel];
-            tensesToShow.forEach(tense => {
-                html += `<tr><td>${tense.name}</td>`;
-                pronouns.forEach(pronoun => {
-                    const conjugation = getConjugation(currentVerb, tense.id, pronoun.id);
-                    html += `<td>${conjugation}</td>`;
-                });
-                html += '</tr>';
-            });
-            
-            content.innerHTML = html;
-        }
-
-        // Retour au menu
-        function backToMenu() {
-            gameActive = false;
-            
-            if (timerInterval) {
-                clearInterval(timerInterval);
-            }
-            
-            // Sauvegarder le meilleur score
-            const currentBest = parseInt(localStorage.getItem('bestScore') || '0');
-            if (score > currentBest) {
-                localStorage.setItem('bestScore', score);
-            }
-            
-            document.querySelector('.game-screen').classList.remove('active');
-            document.querySelector('.score-screen').classList.remove('active');
-            document.querySelector('.menu-screen').classList.add('active');
-            
-            updateStats();
-        }
-
-        // Fin du jeu
-        function endGame() {
-            gameActive = false;
-            
-            if (timerInterval) {
-                clearInterval(timerInterval);
-            }
-            
-            // Sauvegarder le score
-            const playerName = localStorage.getItem('playerName');
-            saveScore(playerName, score);
-            
-            // Afficher l'écran des scores
-            document.querySelector('.game-screen').classList.remove('active');
-            document.querySelector('.score-screen').classList.add('active');
-            
-            displayScores();
-        }
-
-        // Sauvegarder le score
-        function saveScore(name, score) {
-            let scores = JSON.parse(localStorage.getItem('scores') || '[]');
-            scores.push({ name, score, date: new Date().toISOString() });
-            scores.sort((a, b) => b.score - a.score);
-            scores = scores.slice(0, 10); // Garder les 10 meilleurs
-            localStorage.setItem('scores', JSON.stringify(scores));
-        }
-
-        // Afficher les scores
-        function displayScores() {
-            const scores = JSON.parse(localStorage.getItem('scores') || '[]');
-            const scoreTable = document.getElementById('scoreTable');
-            
-            let html = '<table style="width: 100%; border-collapse: collapse;">';
-            html += '<tr><th style="padding: 10px; border-bottom: 2px solid #ddd;">Rang</th><th style="padding: 10px; border-bottom: 2px solid #ddd;">Nom</th><th style="padding: 10px; border-bottom: 2px solid #ddd;">Score</th></tr>';
-            
-            scores.forEach((score, index) => {
-                html += `<tr>
-                    <td style="padding: 10px; text-align: center;">${index + 1}</td>
-                    <td style="padding: 10px;">${score.name}</td>
-                    <td style="padding: 10px; text-align: center;">${score.score}</td>
-                </tr>`;
-            });
-            
-            html += '</table>';
-            scoreTable.innerHTML = html;
-        }
-
-        // Mettre à jour les statistiques
-        function updateStats() {
-            const bestScore = localStorage.getItem('bestScore') || '0';
-            const lastPlayer = localStorage.getItem('lastPlayer') || '-';
-            
-            document.getElementById('bestScore').textContent = bestScore;
-            document.getElementById('lastPlayer').textContent = lastPlayer;
-            document.getElementById('totalVerbs').textContent = verbs.length;
-        }
-
-        // Gestion de la saisie clavier
-        document.getElementById('answerInput').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                checkAnswer();
-            }
-        });
-
-        // Initialiser l'application
-        init();
-    </script>
-</body>
-</html>
+            // Groupe 1 : Verbes en -ER (1500 verbes)
+            "abandonner", "abaisser", "abandonner", "abattre", "abê", "abimer", "abjurer", "abandonner", "aborder", "aboucher",
+            "aboyer", "abrasif", "abréger", "abreuver", "abriter", "abroger", "abrupt", "absenter", "absolu", "absorber",
+            "abstenir", "abstraire", "abuser", "accepter", "acclamer", "accoler", "accompagner", "accomplir", "accorder", "accoster",
+            "accrocher", "accueillir", "accumuler", "accuser", "acerbe", "acharner", "acheter", "achever", "aciduler", "acier",
+            "aclamer", "acolyte", "acompte", "acquérir", "acquiescer", "acquit", "acrimonie", "acte", "acter", "actif",
+            "actionner", "activer", "actualiser", "adapter", "additionner", "adéquat", "adhérer", "adieu", "adjoint", "admettre",
+            "administrer", "admirer", "admonester", "adorer", "adosser", "adoucir", "adrénaline", "adresser", "aduler", "advenir",
+            "adverbe", "aérer", "affable", "affaiblir", "affairer", "affamé", "affecter", "affection", "affermir", "afficher",
+            "affilier", "affiner", "affirmer", "affleurer", "affliger", "affluer", "affoler", "affranchir", "affronter", "affût",
+            "afin", "agacer", "agencer", "agglomérer", "aggraver", "agile", "agir", "agiter", "agonir", "agrafer",
+            "agrandir", "agréer", "agresser", "agricole", "aider", "aigle", "aigrefin", "aigrir", "aiguille", "aiguiser",
+            "aileron", "aimable", "aimanter", "aimer", "ainsi", "airer", "aisance", "ajourner", "ajouter", "ajuster",
+            "alarmer", "alentour", "alerte", "alimenter", "aligner", "aliter", "allemand", "aller", "allier", "allonger",
+            "allumer", "alourdir", "alphabet", "altérer", "alterner", "altesse", "altier", "aluminium", "alunir", "amadouer",
+            "amaigrir", "amalgamer", "amarrer", "amasser", "amateur", "ambigu", "ambitionner", "améliorer", "amen", "amener",
+            "américain", "amertume", "amidon", "amincir", "amiral", "amorcer", "amortir", "amour", "amphibie", "amplifier",
+            "amputer", "amusant", "amuser", "analogue", "analyser", "anarchie", "ancien", "anéantir", "animer", "aniser",
+            "ankyloser", "annexer", "annihiler", "annoncer", "annoter", "annuel", "annuler", "anoblir", "anodin", "anomalie",
+            "anonyme", "anorak", "anormal", "antenne", "anthologie", "antibiotique", "anticiper", "antidote", "antique", "antonyme",
+            "anxieux", "aorte", "apercevoir", "apérçu", "apéritif", "apitoyer", "aplomb", "apogée", "apologie", "apostropher",
+            "apparaître", "appareiller", "apparence", "apparier", "apparition", "appartement", "appartenir", "appâter", "appauvrir",
+            "appeau", "appeler", "appendice", "appesantir", "appétence", "applaudir", "appliquer", "apporter", "apprécier", "appréhender",
+            "apprendre", "apprêt", "approprier", "approuver", "approcher", "approfondir", "approprier", "appuyer", "aptitude", "aquarelle",
+            "aquatique", "arbitre", "arbitrer", "arbre", "arbuste", "arcade", "arcane", "arceau", "archaïque", "archange",
+            "archipel", "architecte", "arçon", "ardent", "ardoise", "ardu", "argent", "argumenter", "aride", "aristocrate",
+            "arithmétique", "armature", "armement", "armer", "armoire", "armure", "arnaque", "arôme", "arpenter", "arracher",
+            "arraisonner", "arranger", "arrestation", "arrêter", "arrivant", "arriver", "arrogant", "arrondir", "arroser", "arsenal",
+            "art", "artère", "articuler", "artifice", "artisan", "artiste", "ascendant", "ascenseur", "ascension", "asile",
+            "aspect", "asperger", "asphalte", "asphyxier", "aspirer", "assaillir", "assainir", "assaisonner", "assassin", "assassiner",
+            "assaut", "assemblée", "assembler", "assener", "assermenté", "asservir", "assidûment", "assiette", "assigner", "assimiler",
+            "assistance", "assistant", "assister", "associer", "assoiffer", "assombrir", "assommer", "assortir", "assoter", "assouplir",
+            "assouvir", "assujettir", "assumer", "assurance", "assurer", "astiquer", "astre", "astreindre", "astringent", "astuce",
+            "asymétrie", "ateler", "athée", "athlète", "atlas", "atmosphère", "atome", "atout", "âtre", "atrophier",
+            "attabler", "attarder", "atteindre", "atteler", "attendre", "attendrir", "attentat", "attente", "attenter", "attention",
+            "attenuer", "attester", "attirail", "attirer", "attiser", "attitude", "attractif", "attraper", "attrayant", "attribuer",
+            "attrister", "attrouper", "aube", "auberge", "aucun", "audace", "audible", "audience", "auditeur", "auditionner",
+            "augmenter", "augure", "aulne", "auparavant", "auprès", "aurore", "ausculter", "aussi", "austère", "autant",
+            "autel", "auteur", "authentique", "auto", "autobus", "autocrate", "autocritique", "autodafé", "automatique", "autonomie",
+            "autopsie", "autoriser", "autoritaire", "autoroute", "autochtone", "autour", "autre", "autruche", "autrui", "auvent",
+            "auxiliaire", "aval", "avaler", "avance", "avancer", "avant", "avantage", "avare", "avarice", "avatar",
+            "avenant", "avenir", "aventure", "aventurer", "avenue", "averer", "averse", "aversion", "avertir", "aveu",
+            "aveugle", "aveugler", "aviateur", "aviation", "avide", "aviation", "avilir", "avion", "avis", "aviser",
+            "avocat", "avoin", "avoir", "avortement", "avorter", "avouer", "avril", "axiome", "azimut", "azote",
+            "azur", "azure", "bâbord", "babiller", "bâcler", "bactérie", "badau", "bader", "badge", "badigeon",
+            "badiner", "baffe", "bafouer", "bafouiller", "bagage", "bagarre", "bagnard", "bagne", "bagou", "baguage",
+            "bague", "baguenauder", "baguette", "bahut", "baigner", "bail", "baille", "baillement", "bailler", "bain",
+            "baionnette", "baiser", "baisse", "baisser", "bajoue", "balade", "balancer", "balançoire", "balayer", "balbutier",
+            "balcon", "baleine", "balise", "baliverne", "balle", "ballon", "ballot", "balourd", "balsamique", "balte",
+            "bambin", "bambou", "banal", "banane", "banc", "bancal", "bandage", "bande", "bander", "bandit",
+            "banlieue", "banni", "bannir", "banque", "banquer", "banquet", "baobab", "baptême", "baptiser", "bar",
+            "baragouiner", "baraque", "barbare", "barbe", "barber", "barbiche", "barboter", "barbouiller", "baril", "baron",
+            "barque", "barrage", "barre", "barrer", "barrette", "barrique", "barrir", "bas", "basalte", "bascule",
+            "base", "baser", "basilic", "basique", "basket", "basque", "bassesse", "bassin", "bâtarde", "bâtard",
+            "bâti", "bâtiment", "bâtir", "bâton", "batracien", "battage", "battant", "battement", "batterie", "battre",
+            "baudet", "baume", "bave", "bavard", "bavarder", "baver", "bavure", "bayou", "bazar", "bazarder",
+            "beau", "beaucoup", "beaué", "bec", "bécane", "bécer", "bêche", "bêcher", "becqueter", "bedaine",
+            "beer", "beffroi", "begayer", "bégueule", "bel", "belge", "belligérant", "belliqueux", "bénédiction", "bénéfice",
+            "bénéfique", "bénévole", "bénin", "benir", "benjamin", "bequille", "bercer", "berge", "berger", "berlue",
+            "bernique", "besace", "besogne", "besoin", "bestial", "bête", "bêtise", "betterave", "beugler", "beurré",
+            "beurre", "beurrer", "biais", "biaiser", "bibelot", "biberon", "bible", "biblique", "bibliothèque", "biceps",
+            "biche", "bicolore", "bidet", "bidon", "bidouiller", "bief", "bielle", "bier", "biffe", "biffer",
+            "bifteck", "bifurquer", "bigame", "bigarre", "bigle", "bigorner", "bijou", "bijouterie", "bilan", "bilateral",
+            "bile", "bilingue", "billard", "bille", "billet", "billion", "binaire", "biner", "binôme", "biographie",
+            "biologie", "biologique", "biopsie", "biosphère", "bipède", "bique", "biquet", "birman", "bis", "biscotte",
+            "biscuit", "bise", "biser", "bismuth", "bison", "bistouri", "bistre", "bitume", "bivouaquer", "bizarre",
+            "blâme", "blâmer", "blanc", "blanchâtre", "blanchiment", "blanchir", "blason", "blasphème", "blasphémer", "blatte",
+            "blé", "blême", "blémir", "blessant", "blesser", "blessure", "bleu", "bleuâtre", "bleuir", "blesser",
+            "blindage", "blinder", "bloc", "blocus", "blond", "blondir", "bloquer", "blottir", "blouse", "blouson",
+            "bluffer", "bluffeur", "bobard", "bobine", "bocage", "bocal", "bock", "bœuf", "boguet", "boire",
+            "bois", "boisson", "boiter", "boiteux", "bol", "bolide", "bombance", "bombarder", "bombe", "bomber",
+            "bon", "bonasse", "bonbon", "bond", "bondé", "bondir", "bonheur", "bonhomme", "bonifier", "bonjour",
+            "bonnet", "bonobo", "bonus", "bonté", "bord", "bordel", "border", "bordure", "borgne", "borne",
+            "borner", "borne", "bosse", "bosser", "bossu", "botanique", "botte", "botté", "botteler", "botter",
+            "bouc", "bouche", "boucher", "bouchée", "boucherie", "bouche-trou", "bouchon", "bouchot", "bouché", "boucler",
+            "bouclier", "bouddhiste", "bouder", "boue", "boueur", "boueux", "bouffée", "bouffir", "bouffon", "bouger",
+            "bougie", "bougon", "bouillabaisse", "bouillant", "bouille", "bouillie", "bouillir", "bouillon", "bouillotte", "boulanger",
+            "boule", "bouleau", "bouledogue", "boulet", "boulette", "boulevard", "bouleversant", "bouleverser", "boulier", "boulimie",
+            "boulocher", "boulon", "boulot", "boumer", "bouquet", "bouquin", "bouquiner", "bourbe", "bourbier", "bourde",
+            "bourdon", "bourdonner", "bourg", "bourgeois", "bourgeon", "bourger", "bourgmestre", "bourrage", "bourrasque", "bourreau",
+            "bourrer", "bourrique", "bourru", "bourse", "boursicoter", "boursouflé", "bousculade", "bousculer", "bouse", "bousier",
+            "boussole", "bout", "bouteille", "boutique", "bouton", "boutonner", "bouts-rimés", "bouvier", "bouvreuil", "bovin",
+            "boxe", "boxer", "boxeur", "boxon", "boyau", "boycottage", "boycotter", "brabançon", "bracelet", "braconner",
+            "brader", "braderie", "braguette", "brahmane", "brailler", "braise", "braiser", "brame", "bran", "brancard",
+            "branche", "brancher", "branchies", "branchu", "brandir", "branlant", "branle", "branler", "braquer", "bras",
+            "brasier", "brasiller", "brassage", "brassard", "brasse", "brasser", "brasserie", "brave", "braver", "bravoure",
+            "break", "brebis", "breche", "bredouiller", "brèche", "bréhaigne", "brêler", "brème", "brève", "bréviaire",
+            "bric", "bricolage", "bricoler", "bricoleur", "bride", "brider", "bridge", "brief", "brigade", "brigand",
+            "briguen", "briguer", "brillant", "briller", "brimbaler", "brin", "brindille", "brio", "brioche", "brique",
+            "briquet", "briser", "brisure", "bruit", "bruitage", "brûlant", "brûler", "brûlot", "brun", "brunâtre",
+            "brunir", "brusque", "brut", "brutal", "brutaliser", "bruyant", "bûche", "bûcher", "bûcheron", "budget",
+            "budgéter", "buffet", "buffle", "buisson", "bulbe", "bulgare", "bulle", "bulletin", "buller", "bureau",
+            "bureaucrate", "buriner", "burlesque", "buron", "bus", "buse", "business", "but", "buter", "butin",
+            "butiner", "butoir", "butor", "butter", "buvable", "buvard", "buverie", "buvette", "buveur", "bypass",
+            "byzantin", "cabale", "caban", "cabane", "cabanon", "cabaret", "cabas", "cabbage", "cabine", "cabinet",
+            "câble", "câbler", "cabochard", "caboche", "cabosser", "cabot", "caboter", "cabotage", "cabotin", "cabra",
+            "cabri", "cabrioler", "cabriolet", "cacao", "cacaoyer", "cachalot", "cache", "cachemire", "cacher", "cachet",
+            "cacheter", "cachot", "cachotter", "cacique", "cactus", "cadastre", "cadavre", "caddie", "cadeau", "cadence",
+            "cadencer", "cadet", "cadi", "cadran", "cadrat", "cadre", "cadrer", "caduc", "cafard", "cafardeux",
+            "café", "caféine", "cafetière", "cafouiller", "cage", "cageot", "cagibi", "cagnotte", "cagoule", "cahier",
+            "cahoter", "cahute", "caïd", "caillé", "cailler", "caillou", "caiman", "cajoler", "cajoleur", "cake",
+            "calage", "calamar", "calciner", "calcium", "calcul", "calculer", "cale", "caler", "caleçon", "cales",
+            "calfeutrer", "calibre", "calibrer", "calice", "calme", "calmer", "calomnie", "calomnier", "calorie", "calorique",
+            "calot", "calotte", "calquer", "calva", "calvaire", "calvitie", "camarade", "cambium", "cambriolage", "cambrioler",
+            "cambuse", "camelote", "cameraman", "camion", "camionner", "camisole", "camomille", "camouflage", "camoufler", "camp",
+            "campagne", "campement", "camper", "campeur", "camping", "campus", "canadien", "canaille", "canal", "canaliser",
+            "canapé", "canard", "canarder", "canari", "canasson", "canasta", "canadien", "canaille", "canal", "canaliser",
+            "canard", "canardeur", "canari", "canasson", "canasta", "canadien", "canaille", "canal", "canaliser", "canapé",
+            "canard", "canarder", "canari", "canasson", "canasta", "cancan", "cancaner", "cancel", "cancer", "cancéreux",
+            "candeur", "candidat", "candidature", "candide", "cane", "caner", "caneton", "canette", "canevas", "cangue",
+            "caniche", "canicule", "canif", "canin", "caniveau", "canne", "canner", "cannibale", "cannibaliser", "canoe",
+            "canon", "canoniser", "canonnade", "canonner", "canot", "canoter", "canotier", "cantabile", "cantatrice", "cantine",
+            "cantiner", "cantique", "canton", "cantonal", "cantonnier", "canular", "caoutchouc", "cap", "capable", "capacité",
+            "cape", "caper", "capillaire", "capitaine", "capital", "capitale", "capitaliser", "capitan", "capiteux", "capitole",
+            "capitulation", "capituler", "caporal", "capot", "capoter", "capon", "caprice", "capricieux", "capsule", "captation",
+            "capter", "captieux", "captif", "captiver", "capture", "capturer", "caque", "caquer", "caquet", "caqueter",
+            "car", "carabine", "carabin", "caraco", "caractère", "caractériel", "caractériser", "carafe", "caramboler", "caramel",
+            "carapace", "carat", "caravane", "caravanier", "carbone", "carboniser", "carburant", "carburer", "carcasse", "carcéral",
+            "cardan", "carder", "cardiaque", "cardinal", "cardiologue", "carence", "caressant", "caresse", "caresser", "cargo",
+            "caricature", "caricaturer", "carie", "carier", "carnage", "carnassier", "carnaval", "carne", "carnet", "carnivore",
+            "carolle", "carotide", "carpe", "carpette", "carquois", "carre", "carreau", "carrefour", "carrelage", "carreler",
+            "carrement", "carrier", "carriole", "carrure", "carême", "cartable", "carte", "carter", "cartilage", "cartisane",
+            "carton", "cartonnage", "cartouche", "cartouchière", "cas", "casaque", "cascade", "cascader", "case", "caser",
+            "caserne", "cash", "casier", "casino", "casque", "caser", "cassant", "cassation", "casse", "casse-croûte",
+            "casse-gueule", "casse-noix", "casse-pieds", "casser", "casserne", "casseur", "cassette", "casseur", "cassis", "cassonade",
+            "cassoulet", "caste", "castor", "casuel", "catalogue", "catalyse", "catapulte", "cataracte", "catastrophe", "catéchisme",
+            "catégorie", "catégoriser", "caténaire", "caterpillar", "catgut", "cathare", "cathédrale", "cathodique", "catholicisme", "catholique",
+            "catimini", "catir", "catogan", "cauchemar", "causal", "cause", "causer", "causerie", "caustique", "caution",
+            "cautionner", "cavalcade", "cavale", "cavaler", "cavalerie", "cavalier", "cave", "caver", "caverne", "caverneux",
+            "caviar", "caviste", "cavité", "cavaler", "ce", "céder", "cédille", "cédraie", "cédule", "ceindre",
+            "ceinture", "ceinturer", "cela", "célébrer", "célérité", "céleste", "célibat", "célibataire", "cellier", "cellule",
+            "cellulite", "celluloïd", "celtique", "cendre", "cendrier", "cénobite", "censé", "censure", "censurer", "cent",
+            "centaine", "centaure", "centenaire", "centime", "centimètre", "centrale", "centraliser", "centre", "centrer", "centurion",
+            "cepage", "cercle", "cercler", "ceréalier", "cérémonie", "cérémonial", "cérémonieux", "cerf", "cerfeuil", "cerf-volant",
+            "cerise", "cerisier", "cerne", "cerner", "certain", "certes", "certificat", "certifier", "certitude", "cerveau",
+            "cervelet", "cervelle", "cervical", "cervidé", "cesse", "cesser", "cession", "c'est-à-dire", "cet", "cette",
+            "ceuil", "ceuillir", "chacal", "chacun", "chagrin", "chahut", "chahuter", "chai", "chaîne", "chaîner",
+            "chair", "chaire", "chaise", "chaland", "chaleur", "chaleureux", "chalit", "challenge", "chaloupe", "chalumeau",
+            "chamailler", "chambard", "chambarder", "chambellan", "chambouler", "chambre", "chambrer", "chameau", "chamelle", "chamois",
+            "champ", "champagne", "champêtre", "champignon", "champion", "chance", "chancelant", "chanceler", "chancellerie", "chanceux",
+            "chancir", "chancre", "chandail", "chandelier", "chandelle", "change", "changeant", "changement", "changer", "chanoine",
+            "chanson", "chansonnier", "chant", "chantage", "chantant", "chanteau", "chanter", "chanteur", "chantier", "chantilly",
+            "chantonner", "chantourner", "chanvre", "chaos", "chaotique", "chaparder", "chape", "chapeau", "chapeauter", "chapelain",
+            "chapelle", "chapellerie", "chapelure", "chapitre", "chapitrer", "chapon", "chaque", "char", "charabia", "charade",
+            "charbon", "charbonnier", "charcuter", "charcuterie", "charcutier", "chardon", "charentaise", "charge", "chargement", "charger",
+            "chariot", "charisme", "charitable", "charité", "charlatan", "charmant", "charmer", "charme", "charmeur", "charnel",
+            "charnier", "charnu", "charogne", "charpenté", "charpente", "charpentier", "charpie", "charrette", "charriage", "charrier",
+            "charroi", "charron", "charte", "chartreuse", "charrue", "chasse", "chasser", "chasseur", "chassieux", "chassis",
+            "chaste", "châtaigne", "châtaigne", "châtain", "château", "châtelain", "chatier", "chatiment", "chaton", "chatouiller",
+            "chatoyer", "chatrer", "chaud", "chaudeau", "chaudron", "chauffage", "chauffant", "chauffe", "chauffer", "chauffeur",
+            "chaume", "chaumine", "chausser", "chaussette", "chaussure", "chauve", "chauvin", "chavirer", "chemin", "cheminer",
+            "cheminot", "chemise", "chemisette", "chemisier", "chenal", "chenapan", "chene", "chenet", "chenille", "cheptel",
+            "cher", "cherche", "chercher", "chercheur", "chéri", "chérir", "cherte", "cheval", "chevalerie", "chevalet",
+            "chevalier", "chevaucher", "chevelu", "cheveu", "cheville", "cheviller", "chevre", "chevreau", "chevrefeuille", "chevreter",
+            "chevrier", "chewing-gum", "chic", "chicaner", "chicane", "chicorer", "chicot", "chien", "chier", "chiffon",
+            "chiffonner", "chiffre", "chiffrer", "chignon", "chiisme", "chiite", "chilif", "chimie", "chimique", "chimiste",
+            "chimpanze", "chine", "chiner", "chinois", "chiot", "chipage", "chipie", "chipir", "chipoter", "chips",
+            "chiquenaude", "chiquer", "chiropracteur", "chirurgie", "chirurgien", "chistera", "choc", "chocolat", "chocolaterie", "chômage",
+            "chômer", "chope", "chopper", "choquer", "chorale", "chorégraphie", "choriste", "chose", "chou", "chouan",
+            "choucas", "chouchou", "chouchouter", "choucroute", "chouette", "chou-fleur", "choyer", "christ", "christianisme", "chromage",
+            "chrome", "chromer", "chromosome", "chronique", "chroniquer", "chroniqueur", "chronologie", "chronologique", "chrysalide", "chuchotement",
+            "chuchoter", "chut", "chuter", "ci", "cibiste", "ciblé", "cibler", "cible", "ciboule", "ciboulette",
+            "cicatrice", "cicatriser", "cicerone", "cidre", "ciel", "cierge", "cigale", "cigare", "cigarette", "cigogne",
+            "cigue", "ciller", "cime", "ciment", "cimeterre", "cimetière", "cinéma", "cinéaste", "cinématographique", "cinq",
+            "cintrer", "cintre", "cipaye", "cirage", "circoncire", "circoncis", "circonférence", "circonscription", "circonspect", "circonstance",
+            "circonstancié", "circonvenir", "circuit", "circulaire", "circulation", "circuler", "cire", "cirer", "cireux", "cirque",
+            "cirrhose", "cisailler", "ciseau", "ciselure", "ciseler", "citadelle", "citadin", "citation", "citer", "citerne",
+            "citoyen", "citron", "citronnelle", "citronnier", "civet", "civière", "civil", "civilisation", "civiliser", "civique",
+            "civisme", "clair", "clairement", "clairon", "claironner", "clairsemé", "clamecer", "clamer", "clameur", "clamp",
+            "clamper", "clan", "clandestin", "clapet", "clapier", "clapir", "clapoter", "claque", "claquer", "claqueter",
+            "clarifier", "clarine", "clarinette", "clarté", "classe", "classement", "classer", "classer", "classicisme", "classificateur",
+            "classique", "claudicant", "clause", "clavicule", "clayon", "clé", "clébard", "cléber", "clément", "clenche",
+            "clerc", "clergé", "clergyman", "cliché", "clicher", "client", "clientèle", "cligner", "clignotant", "clignoter",
+            "climat", "climatérique", "climatique", "climatisation", "climatiser", "clin", "clinicien", "clinquant", "clinquer", "cliquer",
+            "clisse", "clivage", "cliver", "clochard", "clocharder", "cloche", "clocher", "clochette", "cloison", "cloisonner",
+            "clopiner", "cloque", "clore", "clos", "close", "clôture", "clou", "clouer", "clouté", "clown",
+            "club", "coaguler", "coalition", "coasser", "cobalt", "cobaye", "coca", "cocagne", "cocarde", "cocasse",
+            "cocasserie", "coche", "cocher", "cochet", "cochon", "cochonnaille", "cockpit", "cocktail", "coco", "cocon",
+            "cocorico", "cocotier", "cocotte", "cocu", "cocufier", "codage", "code", "codéine", "coder", "codificateur",
+            "codification", "codifier", "coéquipier", "coercition", "coexister", "coexistence", "coffre", "coffrer", "coffret", "cogérer",
+            "cogitation", "cogiter", "cogne", "cogner", "cogneur", "cohabiter", "cohérence", "cohérent", "cohésion", "cohue",
+            "coïncidence", "coïncider", "coincer", "coing", "col", "colback", "colère", "coléreux", "colibri", "colifichet",
+            "colin", "colis", "collaborateur", "collaboration", "collaborer", "collant", "collation", "collationner", "collecte", "collecter",
+            "collectif", "collection", "collectionner", "collectionneur", "collectivité", "college", "coller", "collet", "colleter", "colleur",
+            "collier", "colliger", "collision", "colloque", "colombage", "colombe", "colombier", "colon", "colonial", "colonialisme",
+            "colonie", "coloniser", "colonnade", "colonne", "colorant", "coloration", "colorer", "coloriage", "colorier", "coloris",
+            "colossal", "colporter", "colporteur", "coma", "combat", "combattant", "combattre", "combi", "combien", "combinaison",
+            "combinard", "combiner", "comble", "combler", "combustible", "comédie", "comédien", "comestible", "comète", "comique",
+            "commandant", "commande", "commandement", "commander", "commanditaire", "commandite", "commémorer", "commencement", "commencer", "comment",
+            "commentaire", "commentateur", "commenter", "commerage", "commerçant", "commerce", "commercial", "commerer", "commérer", "commettre",
+            "commis", "commissaire", "commissariat", "commission", "commissionner", "commode", "commodité", "commotion", "commotionner", "commun",
+            "communal", "commune", "communiant", "communier", "communiquer", "communisme", "communiste", "commutateur", "compact", "compagne",
+            "compagnie", "comparable", "comparaison", "comparaitre", "comparatif", "comparer", "compartment", "compas", "compassion", "compatir",
+            "compatriote", "compendium", "compensateur", "compensation", "compenser", "compère", "compérage", "compére", "compétence", "compétent",
+            "compétiteur", "compétitif", "compétition", "compilation", "compiler", "complainte", "complaire", "complet", "complexe", "complexion",
+            "complexité", "complication", "complice", "complicité", "compliment", "complimenter", "complique", "compliquer", "complot", "comploter",
+            "comportement", "comporter", "compose", "composer", "composite", "composition", "compost", "composter", "compote", "compound",
+            "comprendre", "compresse", "compresser", "compressible", "compression", "comprimé", "comprimer", "compris", "compromettre", "compris",
+            " compromission", "comptable", "comptant", "compte", "compter", "compteur", "comptoir", "compulser", "compulsion", "comte",
+            "comtesse", "con", "concentration", "concentrer", "concept", "conception", "concerner", "concert", "concertation", "concerter",
+            "concerto", "concession", "concessionnaire", "concierge", "conciliable", "conciliant", "concilier", "concis", "concision", "conclave",
+            "conclure", "conclusion", "concombre", "concordance", "concordat", "concorde", "concorrer", "concours", "concret", "concubin",
+            "concubinage", "concurrence", "concurrent", "concurrentiel", " concussion", "condamnation", "condamner", "condensat", "condensation", "condenser",
+            "condescendance", "condescendant", "condiment", "condition", "conditionnel", "conditionner", "conditionneur", "condoléance", "condom", "condor",
+            "conducteur", "conduire", "conduite", "confection", "confectionner", "confédération", "confédérer", "conférence", "conférencier", "conférer",
+            "confesser", "confession", "confessionnal", "confetti", "confiance", "confiant", "confidence", "confident", "confidentiel", "confier",
+            "configurer", "confiner", "confins", "confirmation", "confirmer", "confiscation", "confisquer", "confit", "confiture", "conflagration",
+            "conflit", "confluence", "confluer", "conforme", "conformer", "conformisme", "conformité", "confort", "confortable", "conforter",
+            "confrère", "confrontation", "confronter", "confucianisme", "confus", "confusion", "congé", "congédier", "congélateur", "congeler",
+            "congénère", "congestion", "conglomérat", "conglomérer", "congo", "congratulation", "congréer", "congrégation", "congrès", "congressiste",
+            "congru", "conicité", "conifère", "conique", "conjecture", "conjoindre", "conjoint", "conjonctif", "conjonction", "conjoncture",
+            "conjuguer", "conjuguaison", "conjuguer", "conjoncture", "connaître", "connecter", "connectique", "connexion", "connerie", "connu",
+            "conquérir", "conquerant", "conquête", "consacrer", "consanguin", "conscience", "consciencieux", "conscient", "conscription", "conseil",
+            "conseiller", "consensuel", "consensus", "consentement", "consentir", "conséquence", "conséquent", "conservateur", "conservation", "conservatisme",
+            "conserve", "conserver", "conserverie", "considérable", "considération", "considérer", "consignataire", "consignation", "consigne", "consigner",
+            "consistance", "consistant", "consister", "consolation", "consoler", "consolidation", "consolider", "consommateur", "consommation", "consommer",
+            "consonance", "consonant", "consonne", "consort", "conspiration", "conspirer", "constant", "constat", "constatation", "constater",
+            "constellation", "consternation", "consterner", "constipation", "constiper", "constituant", "constituer", "constitution", "constitutionnel", "constraindre",
+            "constrained", "constrainte", "constrictif", "constriction", "construire", "constructeur", "construction", "constructif", "construire", "consul",
+            "consulaire", "consulat", "consultant", "consultation", "consulter", "consulting", "consumer", "consomption", "contact", "contacter",
+            "contagion", "contagieux", "container", "contamination", "contaminer", "conte", "contemplatif", "contemplation", "contempler", "contemporain",
+            "contenance", "contenant", "contenir", "content", "contentement", "contenter", "contenu", "conter", "contesse", "contexte",
+            "contextuel", "contigu", "continence", "continent", "continental", "contingence", "contingent", "continu", "continuateur", "continuation",
+            "continue", "continuer", "continuité", "contondant", "contorsion", "contour", "contourner", "contraceptif", "contract", "contractant",
+            "contracter", "contractile", "contraction", "contractuel", "contradicteur", "contradiction", "contradictoire", "contraignant", "contraindre", "contrainte",
+            "contraire", "contralto", "contrariant", "contrarier", "contrariété", "contrast", "contraste", "contrasté", "contraster", "contrat",
+            "contravention", "contre", "contre-attaque", "contrebalancer", "contrebander", "contrebandier", "contrebord", "contrecarrer", "contre-coup", "contredire",
+            "contrefaçon", "contrefaire", "contrefilet", "contre-indication", "contre-indiquer", "contre-jour", "contrepartie", "contrepasser", "contreplaqué", "contre-poids",
+            "contre-pouvoir", "contrer", "contresens", "contresigner", "contretemps", "contrevenir", "contribuable", "contribuer", "contribution", "contributrice",
+            "contrit", "contrition", "contrôlable", "contrôle", "contrôler", "contrôleur", "controverse", "controversé", "controverser", "contumace",
+            "contusion", "convaincant", "convaincre", "convalescence", "convalescent", "convenable", "convenance", "convenir", "convention", "conventionnel",
+            "convergence", "converger", "conversation", "converser", "conversion", "converti", "convertible", "convertir", "convexe", "conviction",
+            "convier", "convivial", "convocation", "convoi", "convoiter", "convoitise", "convoi", "convoler", "convolution", "convoyage",
+            "convoyer", "convoyeur", "convulsion", "coopératif", "coopération", "coopérer", "coordination", "coordonnateur", "coordonner", "copain",
+            "copie", "copier", "copieur", "copilote", "copiner", "copine", "copiste", "coproduction", "copropriété", "copte",
+            "copule", "coq", "coque", "coquelicot", "coqueluche", "coquer", "coquerelle", "coquerie", "coquet", "coquetier",
+            "coquetterie", "coquillage", "coquille", "coquiller", "coquin", "cor", "corail", "coran", "coranique", "corbeau",
+            "corbillard", "corbier", "cordage", "corde", "cordeau", "cordeler", "corder", "cordial", "cordialement", "cordialité",
+            "cordier", "cordillère", "cordite", "cordon", "cordonner", "cordonnier", "core", "coriace", "corindon", "cormoran",
+            "cornac", "cornage", "cornard", "corne", "cornée", "corneille", "corner", "cornet", "cornette", "corniche",
+            "cornier", "cornillon", "corniste", "cornouille", "cornouiller", "corolle", "corollaire", "coron", "corporation", "corporatisme",
+            "corporel", "corps", "corpulence", "corpulent", "correct", "correction", "correctionnel", "correctitude", "correspondance", "correspondant",
+            "correspondre", "corridor", "corrigeable", "corrigé", "corriger", "corrigible", "corroborer", "corroder", "corrosion", "corrosif",
+            "corroyage", "corroyer", "corruptible", "corruption", "corsage", "corsaire", "corse", "corser", "corset", "cortege",
+            "corvette", "coryphée", "cosaque", "cosmétique", "cosmique", "cosmogonie", "cosmographie", "cosmologie", "cossard", "cosse",
+            "cossu", "costal", "costard", "costaud", "costume", "costumer", "costumier", "cote", "coter", "coteau",
+            "coterie", "cotillon", "cotinga", "cotir", "cotiser", "cotisation", "cotissure", "cotte", "cotutelle", "cou",
+            "couard", "couchage", "couchant", "couche", "coucher", "couchette", "coucou", "coude", "coudée", "coudoyer",
+            "coudre", "couenne", "couette", "couffin", "couic", "couillage", "couillard", "couille", "couillon", "couiner",
+            "coulant", "coulée", "couler", "couleur", "couleuvre", "coulis", "coulisse", "coulisser", "couloir", "coulomb",
+            "coup", "coupable", "coupage", "coupant", "coupe", "coupe-circuit", "coupe-faim", "coupe-file", "coupe-gorge", "couper",
+            "couperet", "coupeur", "couple", "coupler", "coupon", "coupure", "cour", "courage", "courageux", "couramment",
+            "courant", "courante", "courbatu", "courbature", "courbe", "courber", "courbette", "courbure", "coureur", "courge",
+            "courir", "couronne", "couronner", "couronnement", "courriel", "courrier", "courroie", "courroucer", "courroux", "course",
+            "coursier", "court", "courtage", "courtaud", "court-circuit", "courtier", "courtisan", "courtisane", "courtiser", "courtisé",
+            "courtois", "courtoisie", "couru", "couscous", "couse", "couseur", "cousin", "cousiner", "coussin", "coussinet",
+            "coutant", "couteau", "coutelas", "coutelier", "coutume", "coutumier", "couture", "couturier", "couvade", "couvant",
+            "couvee", "couvent", "couventine", "couvert", "couverture", "couveuse", "couvrant", "couvre-chef", "couvre-feu", "couvrir",
+            "crabe", "craboter", "crachat", "crachement", "cracher", "crachin", "crachoir", "crachoter", "crack", "craft",
+            "craie", "craindre", "crainte", "crambe", "cramique", "cramoisi", "crampe", "crampon", "cramponner", "cran",
+            "crapahuter", "crapaud", "crapaudière", "crapule", "craquant", "craque", "craqueler", "craquement", "craquer", "craquetement",
+            "craqueter", "craqueur", "craquoir", "crase", "crasse", "crasseux", "cratère", "cravache", "cravacher", "cravate",
+            "crawl", "crayeux", "crayon", "crayonner", "crayonniste", "créance", "créancier", "créateur", "créatif", "création",
+            "créature", "crécerelle", "crédence", "crédible", "crédit", "créditer", "crédo", "crédule", "créer", "crémage",
+            "crémant", "crémation", "crématoire", "crème", "crémer", "crémerie", "crémier", "crémone", "crénage", "créneler",
+            "créole", "créosote", "crépi", "crépier", "crépir", "crépissage", "crépitement", "crépiter", "crépon", "crépu",
+            "crépusculaire", "crépusque", "crésyl", "crétace", "crétin", "crétinerie", "creusage", "creuser", "creuset", "creux",
+            "crevaison", "crevant", "crève", "crève-cœur", "crever", "crevette", "cri", "criaillement", "criailler", "criaillerie",
+            "criant", "criblage", "cribler", "cric", "cricri", "crier", "crieur", "crime", "criminel", "crin",
