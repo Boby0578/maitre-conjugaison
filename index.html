@@ -172,6 +172,23 @@
             text-align: center;
         }
 
+        .voice-recognition-display {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 1.1em;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .voice-recognition-display.active {
+            background: rgba(79, 172, 254, 0.3);
+            border: 2px solid #4facfe;
+        }
+
         .score {
             font-size: 1.3em;
             margin: 20px 0;
@@ -304,6 +321,15 @@
             padding: 5px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
+
+        .phonetic-hint {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 0.9em;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -347,6 +373,10 @@
             
             <div id="question" class="question"></div>
             
+            <div class="voice-recognition-display" id="voiceDisplay">
+                Appuyez sur le micro et prononcez votre réponse
+            </div>
+            
             <div class="microphone-container">
                 <button id="microphone" class="microphone" onclick="toggleRecording()">
                     <svg viewBox="0 0 24 24">
@@ -372,85 +402,16 @@
     <script>
         // Base de données de verbes
         const verbs = [
-            // Groupe 1 (-er)
             "aimer", "parler", "manger", "chanter", "danser", "travailler", "étudier", "jouer", "regarder", "écouter",
-            "habiter", "arriver", "partir", "entrer", "sortir", "monter", "descendre", "tomber", "rester", "aller",
-            "venir", "retourner", "passer", "visiter", "voyager", "préparer", "organiser", "planifier", "commencer",
-            "continuer", "finir", "arrêter", "essayer", "oublier", "chercher", "trouver", "perdre", "gagner",
-            "acheter", "payer", "emprunter", "prêter", "donner", "recevoir", "apporter", "emporter", "envoyer",
-            "montrer", "présenter", "expliquer", "démontrer", "prouver", "affirmer", "déclarer", "annoncer",
-            "proposer", "suggérer", "recommander", "conseiller", "aider", "sauver", "protéger", "défendre",
-            "attaquer", "combattre", "résister", "supporter", "accepter", "refuser", "accepter", "accueillir",
-            "inviter", "remercier", "féliciter", "encourager", "motiver", "inspirer", "créer", "inventer",
-            "découvrir", "explorer", "rechercher", "analyser", "examiner", "observer", "remarquer", "noter",
-            "enregistrer", "sauvegarder", "imprimer", "copier", "coller", "couper", "détruire", "jeter",
-            "recycler", "nettoyer", "laver", "essuyer", "balayer", "ranger", "organiser", "désordonner",
-            "remplir", "vider", "ouvrir", "fermer", "verrouiller", "déverrouiller", "construire", "bâtir",
-            "détruire", "démolir", "réparer", "améliorer", "renover", "décorer", "peindre", "colorier",
-            "dessiner", "sketcher", "photographier", "filmer", "enregistrer", "jouer", "danser", "chanter",
-            "composer", "écrire", "lire", "relire", "corriger", "modifier", "éditer", "publier",
-            "imprimer", "diffuser", "transmettre", "communiquer", "discuter", "parler", "bavarder",
-            "se taire", "écouter", "entendre", "comprendre", "interpréter", "traduire", "apprendre",
-            "étudier", "réviser", "mémoriser", "retenir", "oublier", "se souvenir", "rappeler",
-            "imaginer", "rêver", "penser", "réfléchir", "méditer", "contempler", "observer", "regarder",
-            "voir", "apercevoir", "distinguer", "reconnaître", "identifier", "nommer", "désigner",
-            "choisir", "sélectionner", "opter", "décider", "déterminer", "fixer", "établir", "instaurer",
-            "introduire", "intégrer", "incorporer", "inclure", "exclure", "éliminer", "supprimer",
-            "effacer", "annuler", "retirer", "reprendre", "récupérer", "récupérer", "récupérer",
-            
-            // Groupe 2 (-ir)
-            "finir", "choisir", "grandir", "vieillir", "maigrir", "grossir", "rougir", "pâlir",
-            "jaunir", "noircir", "blanchir", "ramollir", "durcir", "affaiblir", "fortifier",
-            "enrichir", "appauvrir", "allonger", "raccourcir", "élargir", "rétrécir", "approfondir",
-            "survoler", "atterrir", "décoller", "atterrir", "envoler", "s'envoler", "redescendre",
-            "remonter", "redescendre", "remonter", "redescendre", "s'élever", "s'abaisser",
-            "s'allonger", "se raccourcir", "s'élargir", "se rétrécir", "s'approfondir",
-            "s'affaiblir", "se fortifier", "s'enrichir", "s'appauvrir", "se ramollir",
-            "se durcir", "se rougir", "se pâlir", "se jaunir", "se noircir", "se blanchir",
-            
-            // Groupe 3 (irréguliers)
-            "avoir", "être", "faire", "aller", "venir", "devoir", "pouvoir", "savoir",
-            "vouloir", "falloir", "pleuvoir", "voir", "prendre", "comprendre", "apprendre",
-            "surprendre", "reprendre", "entreprendre", "boire", "croire", "lire", "dire",
-            "écrire", "rire", "sourire", "ouvrir", "couvrir", "découvrir", "recouvrir",
-            "offrir", "souffrir", "cueillir", "accueillir", "recueillir", "vêtir",
-            "sortir", "partir", "dormir", "servir", "sentir", "mentir", "départir",
-            "repartir", "consentir", "ressentir", "repentir", "se repentir", "se servir",
-            "s'endormir", "se départir", "se repentir", "se vêtir", "s'asseoir",
-            "se taire", "se plaindre", "se déplaire", "se rire", "se sourire",
-            "s'écrire", "se lire", "se dire", "se boire", "se croire", "se voir",
-            "s'ouvrir", "se couvrir", "se découvrir", "se recouvrir", "s'offrir",
-            "se souffrir", "se cueillir", "s'accueillir", "se recueillir",
-            "naître", "mourir", "courir", "parcourir", "secourir", "fuir",
-            "s'enfuir", "conclure", "inclure", "exclure", "interrompre",
-            "rompre", "corrompre", "rompre", "résoudre", "absoudre", "dissoudre",
-            "coudre", "moudre", "émoudre", "rendre", "vendre", "pendre",
-            "défendre", "attendre", "entendre", "répondre", "correspondre",
-            "confondre", "fondre", "tondre", "plaire", "taire", "extraire",
-            "soustraire", "distraire", "traire", "contraindre", "plaindre",
-            "éteindre", "teindre", "craindre", "joindre", "rejoindre",
-            "poindre", "oindre", "graaître", "paître", "repaaître", "braire",
-            "clore", "fiche", "affiger", "fugir", "garir", "haïr", "quérir"
+            "avoir", "être", "faire", "aller", "venir", "devoir", "pouvoir", "savoir", "vouloir", "voir",
+            "prendre", "comprendre", "apprendre", "boire", "croire", "lire", "dire", "écrire", "rire", "ouvrir"
         ];
 
         // Temps de conjugaison
         const tenses = {
-            1: [ // Niveau 1
-                "présent", "futur", "imparfait"
-            ],
-            2: [ // Niveau 2
-                "présent", "futur", "imparfait", "passé simple", "plus-que-parfait", "subjonctif"
-            ],
-            3: [ // Niveau 3 - Tous les temps
-                "présent", "imparfait", "futur", "passé simple", "passé composé",
-                "plus-que-parfait", "passé antérieur", "futur antérieur",
-                "subjonctif présent", "subjonctif passé", "subjonctif imparfait", "subjonctif plus-que-parfait",
-                "conditionnel présent", "conditionnel passé",
-                "impératif présent", "impératif passé",
-                "infinitif présent", "infinitif passé",
-                "participe présent", "participe passé",
-                "gérondif présent", "gérondif passé"
-            ]
+            1: ["présent", "futur", "imparfait"],
+            2: ["présent", "futur", "imparfait", "passé simple", "plus-que-parfait", "subjonctif"],
+            3: ["présent", "imparfait", "futur", "passé simple", "passé composé", "plus-que-parfait", "subjonctif"]
         };
 
         // Pronoms
@@ -465,6 +426,37 @@
             { text: "elles", display: "elles" }
         ];
 
+        // Table des ambiguïtés phonétiques
+        const phoneticAmbiguities = {
+            // Formes qui sonnent pareil mais s'écrivent différemment
+            "ai": ["ai", "ai", "est", "et", "aie", "ait", "hais"],
+            "as": ["as", "a", "ha"],
+            "est": ["est", "et", "ai", "ait", "aie"],
+            "sont": ["sont", "son"],
+            "vais": ["vais", "vai", "vé"],
+            "fais": ["fais", "fai", "fait"],
+            "peux": ["peux", "peut", "peu"],
+            "veux": ["veux", "veut", "vœu"],
+            "dois": ["dois", "doit", "droit"],
+            "vois": ["vois", "voit", "voie"],
+            "crois": ["crois", "croit", "croix"],
+            "bois": ["bois", "boit", "boie"],
+            "prends": ["prends", "prend", "pris"],
+            "comprends": ["comprends", "comprend", "compris"],
+            "apprends": ["apprends", "apprend", "appris"],
+            "lis": ["lis", "lit", "lie"],
+            "dis": ["dis", "dit", "die"],
+            "écris": ["écris", "écrit", "écrit"],
+            "ouvre": ["ouvre", "ouvert", "ouvré"],
+            "finis": ["finis", "finit", "fini"],
+            "choisis": ["choisis", "choisit", "choisi"],
+            "grandis": ["grandis", "grandit", "grandi"],
+            "rougis": ["rougis", "rougit", "rougi"],
+            "jaunis": ["jaunis", "jaunit", "jauni"],
+            "noircis": ["noircis", "noircit", "noirci"],
+            "blanchis": ["blanchis", "blanchit", "blanchi"]
+        };
+
         // Variables globales
         let currentLevel = 1;
         let currentTimer = 0;
@@ -477,12 +469,6 @@
         let recognition = null;
         let timerInterval = null;
         let timeRemaining = 0;
-
-        // Initialisation
-        window.onload = function() {
-            loadLeaderboard();
-            initializeSpeechRecognition();
-        };
 
         // Sélection du niveau
         function selectLevel(level) {
@@ -510,21 +496,138 @@
                 recognition.interimResults = false;
                 recognition.lang = 'fr-FR';
                 
+                recognition.onstart = function() {
+                    document.getElementById('voiceDisplay').classList.add('active');
+                    document.getElementById('voiceDisplay').textContent = '🎤 Écoute en cours...';
+                };
+                
                 recognition.onresult = function(event) {
                     const transcript = event.results[0][0].transcript.toLowerCase().trim();
-                    document.getElementById('answerInput').value = transcript;
-                    checkAnswer(transcript);
+                    document.getElementById('voiceDisplay').textContent = `J'ai entendu : "${transcript}"`;
+                    
+                    // Traiter la réponse vocale
+                    processVoiceAnswer(transcript);
                 };
                 
                 recognition.onerror = function(event) {
                     console.error('Erreur de reconnaissance:', event.error);
+                    document.getElementById('voiceDisplay').textContent = 'Erreur de reconnaissance, veuillez réessayer';
+                    document.getElementById('voiceDisplay').classList.remove('active');
                     stopRecording();
                 };
                 
                 recognition.onend = function() {
+                    document.getElementById('voiceDisplay').classList.remove('active');
                     stopRecording();
                 };
             }
+        }
+
+        // Traiter la réponse vocale avec gestion des ambiguïtés
+        function processVoiceAnswer(voiceAnswer) {
+            // Afficher ce qui a été entendu
+            document.getElementById('answerInput').value = voiceAnswer;
+            
+            // Nettoyer la réponse
+            voiceAnswer = voiceAnswer.toLowerCase().trim();
+            
+            // Si la réponse exacte est correcte
+            if (isAnswerCorrect(voiceAnswer)) {
+                checkAnswer(voiceAnswer);
+                return;
+            }
+            
+            // Vérifier les ambiguïtés phonétiques
+            let correctedAnswer = handlePhoneticAmbiguities(voiceAnswer);
+            
+            if (correctedAnswer && correctedAnswer !== voiceAnswer) {
+                document.getElementById('voiceDisplay').innerHTML = 
+                    `J'ai entendu : "${voiceAnswer}"<br>
+                     <span style="color: #43e97b;">Correction automatique : ${correctedAnswer}</span>`;
+                document.getElementById('answerInput').value = correctedAnswer;
+                
+                // Vérifier si la réponse corrigée est correcte
+                if (isAnswerCorrect(correctedAnswer)) {
+                    checkAnswer(correctedAnswer);
+                    return;
+                }
+            }
+            
+            // Si aucune correction n'a fonctionné
+            checkAnswer(voiceAnswer);
+        }
+
+        // Gérer les ambiguïtés phonétiques
+        function handlePhoneticAmbiguities(answer) {
+            // Diviser la réponse en mots
+            const words = answer.split(' ');
+            let corrected = [];
+            let hasCorrection = false;
+            
+            words.forEach(word => {
+                // Vérifier si le mot a des ambiguïtés phonétiques
+                let correctedWord = word;
+                
+                // Pour chaque forme correcte possible
+                for (let [spokenForm, possibleWritings] of Object.entries(phoneticAmbiguities)) {
+                    if (word === spokenForm) {
+                        // Trouver la forme correcte pour ce verbe et ce temps
+                        let correctForm = findCorrectPhoneticForm(word);
+                        if (correctForm && correctForm !== word) {
+                            correctedWord = correctForm;
+                            hasCorrection = true;
+                            break;
+                        }
+                    }
+                }
+                
+                corrected.push(correctedWord);
+            });
+            
+            return hasCorrection ? corrected.join(' ') : null;
+        }
+
+        // Trouver la forme phonétique correcte
+        function findCorrectPhoneticForm(spokenWord) {
+            const correctAnswer = conjugateVerb(currentVerb, currentTense, currentPronoun.text).toLowerCase();
+            const pronoun = currentPronoun.text.toLowerCase();
+            
+            // Si la réponse complète est dans les ambiguïtés
+            if (phoneticAmbiguities[spokenWord]) {
+                // Vérifier si la bonne réponse est dans les possibilités
+                for (let form of phoneticAmbiguities[spokenWord]) {
+                    if (form === correctAnswer || 
+                        (pronoun + ' ' + form) === (pronoun + ' ' + correctAnswer)) {
+                        return form;
+                    }
+                }
+            }
+            
+            return null;
+        }
+
+        // Vérifier si une réponse est correcte (avec tolérance)
+        function isAnswerCorrect(userAnswer) {
+            const alternatives = getAnswerAlternatives(correctAnswer);
+            return alternatives.some(alt => userAnswer === alt.toLowerCase());
+        }
+
+        // Obtenir toutes les formes alternatives acceptables
+        function getAnswerAlternatives(correctAnswer) {
+            let alternatives = [correctAnswer.toLowerCase()];
+            
+            // Gérer l'élision
+            if (correctAnswer.startsWith("j'")) {
+                alternatives.push(correctAnswer.replace("j'", "je ").toLowerCase());
+            }
+            
+            // Gérer les formes avec/sans pronom
+            const pronoun = currentPronoun.text.toLowerCase();
+            if (!correctAnswer.toLowerCase().startsWith(pronoun)) {
+                alternatives.push((pronoun + ' ' + correctAnswer).toLowerCase());
+            }
+            
+            return alternatives;
         }
 
         // Toggle enregistrement
@@ -603,6 +706,7 @@
             
             document.getElementById('question').innerHTML = questionText;
             document.getElementById('answerInput').value = '';
+            document.getElementById('voiceDisplay').textContent = 'Appuyez sur le micro et prononcez votre réponse';
             document.getElementById('message').style.display = 'none';
             document.getElementById('conjugationTable').classList.remove('active');
             
@@ -627,9 +731,6 @@
 
         // Conjugaison des verbes
         function conjugateVerb(verb, tense, pronoun) {
-            // Simplification de la conjugaison - en réalité, cela nécessiterait une base de données complète
-            // Pour cette démo, nous utilisons des règles de base
-            
             // Exceptions courantes
             const exceptions = {
                 "avoir": {
@@ -651,11 +752,6 @@
                     "présent": { "je": "vais", "tu": "vas", "il": "va", "nous": "allons", "vous": "allez", "ils": "vont" },
                     "imparfait": { "je": "allais", "tu": "allais", "il": "allait", "nous": "allions", "vous": "alliez", "ils": "allaient" },
                     "futur": { "je": "irai", "tu": "iras", "il": "ira", "nous": "irons", "vous": "irez", "ils": "iront" }
-                },
-                "venir": {
-                    "présent": { "je": "viens", "tu": "viens", "il": "vient", "nous": "venons", "vous": "venez", "ils": "viennent" },
-                    "imparfait": { "je": "venais", "tu": "venais", "il": "venait", "nous": "venions", "vous": "veniez", "ils": "venaient" },
-                    "futur": { "je": "viendrai", "tu": "viendras", "il": "viendra", "nous": "viendrons", "vous": "viendrez", "ils": "viendront" }
                 }
             };
             
@@ -672,7 +768,6 @@
                 if (ending === "er") {
                     const endings = { "je": "e", "tu": "es", "il": "e", "nous": "ons", "vous": "ez", "ils": "ent" };
                     let conjugated = stem + endings[pronoun];
-                    // Gérer l'élision
                     if (pronoun === "je" && /^[aeiou]/.test(conjugated)) {
                         conjugated = "j'" + conjugated;
                     }
@@ -681,21 +776,9 @@
                     const endings = { "je": "is", "tu": "is", "il": "it", "nous": "issons", "vous": "issez", "ils": "issent" };
                     return stem + endings[pronoun];
                 }
-            } else if (tense === "imparfait") {
-                // Pour l'imparfait, utiliser la base de la première personne du pluriel
-                let base = stem + "ons"; // simplification
-                const endings = { "je": "ais", "tu": "ais", "il": "ait", "nous": "ions", "vous": "iez", "ils": "aient" };
-                let conjugated = base.slice(0, -3) + endings[pronoun];
-                if (pronoun === "je" && /^[aeiou]/.test(conjugated)) {
-                    conjugated = "j'" + conjugated;
-                }
-                return conjugated;
-            } else if (tense === "futur") {
-                const endings = { "je": "ai", "tu": "as", "il": "a", "nous": "ons", "vous": "ez", "ils": "ont" };
-                return verb + endings[pronoun];
             }
             
-            return verb; // Par défaut
+            return verb;
         }
 
         // Vérifier la réponse
@@ -704,14 +787,8 @@
             userAnswer = userAnswer.toLowerCase().trim();
             
             // Vérifier les formes alternatives
-            const alternatives = [correctAnswer.toLowerCase()];
+            const alternatives = getAnswerAlternatives(correctAnswer);
             
-            // Gérer les élisions
-            if (correctAnswer.startsWith("j'")) {
-                alternatives.push(correctAnswer.replace("j'", "je "));
-            }
-            
-            // Vérifier la réponse
             if (alternatives.some(alt => userAnswer === alt)) {
                 // Bonne réponse
                 currentScore += 5;
@@ -767,7 +844,6 @@
             const table = document.getElementById('conjugationTable');
             let html = `<h3>Conjugaison de ${currentVerb}</h3>`;
             
-            // Pour la démo, afficher quelques temps principaux
             const mainTenses = ["présent", "imparfait", "futur"];
             
             html += '<table>';
@@ -848,13 +924,11 @@
             }
         });
 
-        // Empêcher la fermeture accidentelle
-        window.addEventListener('beforeunload', function(e) {
-            if (currentScore > 0) {
-                e.preventDefault();
-                e.returnValue = '';
-            }
-        });
+        // Initialisation
+        window.onload = function() {
+            loadLeaderboard();
+            initializeSpeechRecognition();
+        };
     </script>
 </body>
 </html>
